@@ -104,7 +104,7 @@ const HomePage = () => {
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Link href="/card-demo" className="block group">
+            <Link href="/components/card" className="block group">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 group-hover:shadow-xl group-hover:border-[#5f52ff]">
                 <div className="p-6">
                   <div className="flex items-start">
@@ -123,32 +123,46 @@ const HomePage = () => {
                 </div>
               </div>
             </Link>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-start">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Button Component</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">Multiple styles and sizes for any use case</p>
+
+            <Link href="/components/button" className="block group">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 group-hover:shadow-xl group-hover:border-[#5f52ff]">
+                <div className="p-6">
+                  <div className="flex items-start">
+                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                    <div className="ml-4">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Button Component</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mt-1">Multiple styles and sizes for any use case</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-[#5f52ff] font-medium flex items-center">
+                    View Component
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-              <div className="mt-4 text-gray-500 font-medium flex items-center">
-                Coming Soon
-              </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-start">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Modal Component</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">Accessible modal dialogs with smooth animations</p>
+            </Link>
+
+            <Link href="/components/modal" className="block group">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 group-hover:shadow-xl group-hover:border-[#5f52ff]">
+                <div className="p-6">
+                  <div className="flex items-start">
+                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                    <div className="ml-4">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Modal Component</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mt-1">Accessible modal dialogs with smooth animations</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-[#5f52ff] font-medium flex items-center">
+                    View Component
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-              <div className="mt-4 text-gray-500 font-medium flex items-center">
-                Coming Soon
-              </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

@@ -16,7 +16,9 @@ const ComponentLibraryPage = () => {
   };
 
   const components = [
-    { id: 'Card', name: 'Card Component', description: 'Versatile card with image, header, and footer support' },
+    { id: 'card', name: 'Card Component', description: 'Versatile card with image, header, and footer support' },
+    { id: 'button', name: 'Button Component', description: 'Multiple styles and sizes for any use case' },
+    { id: 'modal', name: 'Modal Component', description: 'Accessible modal dialogs with smooth animations' },
   ];
 
   return (
@@ -45,7 +47,7 @@ const ComponentLibraryPage = () => {
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">Component Library</h1>
           <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto">
-            Browse our collection of beautifully designed UI components. Click on any component to view the code and live preview.
+            Browse our collection of beautifully designed UI components. Click on any component to view all available variants.
           </p>
         </div>
 
@@ -53,7 +55,7 @@ const ComponentLibraryPage = () => {
           {components.map((component) => (
             <Link
               key={component.id}
-              href={`/components/${component.id.toLowerCase()}`}
+              href={`/components/${component.id}`}
               className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] cursor-pointer flex flex-col h-full"
             >
               <div className="p-5 flex-grow">
@@ -67,20 +69,33 @@ const ComponentLibraryPage = () => {
                 <div className="mt-3 sm:mt-4">
                   {/* Preview of the component */}
                   <div className="mt-3 sm:mt-4">
-                    <Card
-                      data={{
-                        title: "Sample Card",
-                        description: "Preview of the component",
-                        content: "This is how the component looks"
-                      }}
-                      style={{ container: "w-full max-w-[150px] sm:max-w-[180px] md:max-w-xs" }}
-                    />
+                    {component.id === 'card' && (
+                      <Card
+                        data={{
+                          title: "Sample Card",
+                          description: "Preview of the component",
+                          content: "This is how the component looks"
+                        }}
+                        style={{ container: "w-full max-w-[150px] sm:max-w-[180px] md:max-w-xs" }}
+                      />
+                    )}
+                    {component.id === 'button' && (
+                      <div className="flex space-x-2">
+                        <button className="px-3 py-1.5 bg-[#5f52ff] text-white rounded text-sm">Button</button>
+                        <button className="px-3 py-1.5 border border-[#5f52ff] text-[#5f52ff] rounded text-sm">Outline</button>
+                      </div>
+                    )}
+                    {component.id === 'modal' && (
+                      <div className="border border-gray-300 rounded p-3 bg-gray-50 w-32 h-24 flex items-center justify-center text-xs text-gray-500">
+                        Modal Preview
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
               <div className="p-5 border-t border-gray-100 dark:border-gray-700">
                 <div className="text-[#5f52ff] font-medium flex items-center justify-center sm:justify-start">
-                  View Component
+                  View Variants
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
