@@ -10,6 +10,18 @@ export interface VariantConfig {
 
 export const variants: VariantConfig[] = [
   {
+    id: 'basic',
+    name: 'Basic Card',
+    description: 'Simple card with title and content',
+    componentId: 'card'
+  },
+  {
+    id: 'image',
+    name: 'Card with Image',
+    description: 'Card that includes an image',
+    componentId: 'card'
+  },
+  {
     id: 'news',
     name: 'News Card',
     description: 'News article card with image overlay and text',

@@ -4,14 +4,14 @@ import React from 'react';
 import Link from 'next/link';
 import Card from '@/components/Card';
 import { components } from '@/config/components';
-import { newsCardCSS, newsCardData } from '@/components/variant/card';
+import { basicCardCSS, basicCardData } from '@/components/variant/card';
 
 const ComponentLibraryPage = () => {
   // Dynamic component previews - driven by config
   const getComponentPreview = (componentId: string) => {
     switch (componentId) {
       case 'card':
-        return <Card css={newsCardCSS} data={newsCardData} />;
+        return <Card css={basicCardCSS} data={basicCardData} />;
       default:
         return null;
     }

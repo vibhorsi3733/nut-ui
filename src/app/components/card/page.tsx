@@ -4,36 +4,36 @@ import React from 'react';
 import Link from 'next/link';
 import Card from '@/components/Card';
 import { 
-  newsCardCSS,
-  newsCardData,
-  cardLowerHeadingCSS,
-  cardLowerHeadingData,
-  dataCardCSS,
-  dataCardData
+  basicCardCSS, 
+  basicCardData,
+  imageCardCSS,
+  imageCardData,
+  footerCardCSS,
+  footerCardData
 } from '@/components/variant/card';
 
 const CardPage = () => {
   const variants = [
     {
-      id: 'news',
-      name: 'News Card',
-      description: 'News article card with image overlay and text',
-      css: newsCardCSS,
-      data: newsCardData
+      id: 'basic',
+      name: 'Basic Card',
+      description: 'Simple card with title and content',
+      css: basicCardCSS,
+      data: basicCardData
     },
     {
-      id: 'cardLowerHeading',
-      name: 'Card Lower Heading',
-      description: 'Card with image and heading positioned at the bottom',
-      css: cardLowerHeadingCSS,
-      data: cardLowerHeadingData
+      id: 'image',
+      name: 'Card with Image',
+      description: 'Card that includes an image',
+      css: imageCardCSS,
+      data: imageCardData
     },
     {
-      id: 'dataCard',
-      name: 'Data Card',
-      description: 'Minimalist card displaying a number with label',
-      css: dataCardCSS,
-      data: dataCardData
+      id: 'footer',
+      name: 'Card with Footer',
+      description: 'Card with footer section',
+      css: footerCardCSS,
+      data: footerCardData
     }
   ];
 

@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
 import { 
-  newsCardCSS,
-  newsCardData,
-  cardLowerHeadingCSS,
-  cardLowerHeadingData,
-  dataCardCSS,
-  dataCardData
+  basicCardCSS, 
+  basicCardData,
+  imageCardCSS,
+  imageCardData,
+  footerCardCSS,
+  footerCardData
 } from '@/components/variant/card';
 
 const CardVariantPage = () => {
@@ -19,23 +19,23 @@ const CardVariantPage = () => {
   const [copied, setCopied] = useState(false);
 
   const variants: Record<string, { css: any; data: any; name: string; description: string }> = {
-    news: {
-      css: newsCardCSS,
-      data: newsCardData,
-      name: 'News Card',
-      description: 'News article card with image overlay and text'
+    basic: {
+      css: basicCardCSS,
+      data: basicCardData,
+      name: 'Basic Card',
+      description: 'Simple card with title and content'
     },
-    cardLowerHeading: {
-      css: cardLowerHeadingCSS,
-      data: cardLowerHeadingData,
-      name: 'Card Lower Heading',
-      description: 'Card with image and heading positioned at the bottom'
+    image: {
+      css: imageCardCSS,
+      data: imageCardData,
+      name: 'Card with Image',
+      description: 'Card that includes an image'
     },
-    dataCard: {
-      css: dataCardCSS,
-      data: dataCardData,
-      name: 'Data Card',
-      description: 'Minimalist card displaying a number with label'
+    footer: {
+      css: footerCardCSS,
+      data: footerCardData,
+      name: 'Card with Footer',
+      description: 'Card with footer section'
     }
   };
 

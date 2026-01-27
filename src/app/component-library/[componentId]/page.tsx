@@ -8,6 +8,10 @@ import NewsCardComponent from '@/components/variant/card/NewsCardComponent';
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
 import { 
+  basicCardCSS, 
+  basicCardData,
+  imageCardCSS,
+  imageCardData,
   newsCardCSS,
   newsCardData,
   cardLowerHeadingCSS,
@@ -47,6 +51,10 @@ const ComponentPage = () => {
     switch (componentId) {
       case 'card':
         switch (variantId) {
+          case 'basic':
+            return { css: basicCardCSS, data: basicCardData };
+          case 'image':
+            return { css: imageCardCSS, data: imageCardData };
           case 'news':
             return { css: newsCardCSS, data: newsCardData };
           case 'cardLowerHeading':
