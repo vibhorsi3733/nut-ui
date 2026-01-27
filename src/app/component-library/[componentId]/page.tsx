@@ -1,0 +1,161 @@
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import Card from '@/components/Card';
+import NewsCardComponent from '@/components/variant/card/NewsCardComponent';
+import { components } from '@/config/components';
+import { variants } from '@/config/variants';
+import { 
+  newsCardCSS,
+  newsCardData,
+  cardLowerHeadingCSS,
+  cardLowerHeadingData,
+  dataCardCSS,
+  dataCardData
+} from '@/components/variant/card';
+
+const ComponentPage = () => {
+  const params = useParams();
+  const componentId = params.componentId as string;
+
+  // Get component config dynamically
+  const component = components.find(c => c.id === componentId);
+  
+  // Get all variants for this component dynamically
+  const componentVariants = variants.filter(v => v.componentId === componentId);
+
+  if (!component) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Component Not Found</h1>
+          <Link 
+            href="/component-library" 
+            className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Back to Component Library
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Dynamic variant CSS and data mapping
+  const getVariantConfig = (variantId: string) => {
+    switch (componentId) {
+      case 'card':
+        switch (variantId) {
+          case 'news':
+            return { css: newsCardCSS, data: newsCardData };
+          case 'cardLowerHeading':
+            return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
+          case 'dataCard':
+            return { css: dataCardCSS, data: dataCardData };
+          default:
+            return null;
+        }
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Header */}
+      <header className="py-4 px-4 sm:px-6 lg:px-8 border-b border-gray-200 dark:border-gray-800">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#5f52ff] flex items-center justify-center">
+              <span className="text-white font-bold">N</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">NUT UI</h1>
+          </Link>
+          <nav className="w-full sm:w-auto">
+            <ul className="flex flex-wrap justify-center gap-x-4 sm:gap-x-8 gap-y-2">
+              <li><Link href="/" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Home</Link></li>
+              <li><Link href="/component-library" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Component Library</Link></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+        <div className="mb-8">
+          <Link 
+            href="/component-library" 
+            className="inline-flex items-center text-[#5f52ff] hover:text-indigo-700 mb-4"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Component Library
+          </Link>
+        </div>
+
+        <div className="mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
+            {component.name} Variants
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl">
+            {component.description}
+          </p>
+        </div>
+
+        {componentVariants.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {componentVariants.map((variant) => {
+              const variantConfig = getVariantConfig(variant.id);
+              if (!variantConfig) return null;
+
+              return (
+                <Link
+                  key={variant.id}
+                  href={`/component-library/${componentId}/variants/${variant.id}`}
+                  className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] cursor-pointer"
+                >
+                  <div className="p-5">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                      {variant.name}
+                    </h3>
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4">
+                      {variant.description}
+                    </p>
+                    
+                    {/* Live Preview */}
+                    <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 flex justify-center items-center min-h-[150px]">
+                      {variant.id === 'news' ? (
+                        <NewsCardComponent css={variantConfig.css} data={variantConfig.data} />
+                      ) : (
+                        <Card css={variantConfig.css} data={variantConfig.data} />
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="p-5 border-t border-gray-100 dark:border-gray-700">
+                    <div className="text-[#5f52ff] font-medium flex items-center justify-center sm:justify-start">
+                      View Variant
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No variants available</h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              No variants have been defined for the {component.name} component yet.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ComponentPage;

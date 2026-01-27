@@ -1,25 +1,21 @@
 'use client';
 
 import React from 'react';
-import Card from '@/components/Card';
 import Link from 'next/link';
+import Card from '@/components/Card';
+import { components } from '@/config/components';
+import { newsCardCSS, newsCardData } from '@/components/variant/card';
 
 const ComponentLibraryPage = () => {
-  // No state needed - using routing instead
-
-  // Sample card data for preview
-  const sampleCardData = {
-    title: "Sample Card",
-    description: "A beautiful card component",
-    content: "This is a sample card to demonstrate the component.",
-    footer: "Card Footer"
+  // Dynamic component previews - driven by config
+  const getComponentPreview = (componentId: string) => {
+    switch (componentId) {
+      case 'card':
+        return <Card css={newsCardCSS} data={newsCardData} />;
+      default:
+        return null;
+    }
   };
-
-  const components = [
-    { id: 'card', name: 'Card Component', description: 'Versatile card with image, header, and footer support' },
-    { id: 'button', name: 'Button Component', description: 'Multiple styles and sizes for any use case' },
-    { id: 'modal', name: 'Modal Component', description: 'Accessible modal dialogs with smooth animations' },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -35,9 +31,7 @@ const ComponentLibraryPage = () => {
           <nav className="w-full sm:w-auto">
             <ul className="flex flex-wrap justify-center gap-x-4 sm:gap-x-8 gap-y-2">
               <li><Link href="/" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Home</Link></li>
-              <li><Link href="/component-library" className="text-[#5f52ff] font-medium">Components</Link></li>
-              <li><a href="#" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Documentation</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">GitHub</a></li>
+              <li><Link href="/component-library" className="text-[#5f52ff] font-medium">Component Library</Link></li>
             </ul>
           </nav>
         </div>
@@ -45,63 +39,51 @@ const ComponentLibraryPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
         <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">Component Library</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
+            Component Library
+          </h1>
           <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto">
-            Browse our collection of beautifully designed UI components. Click on any component to view all available variants.
+            Browse our collection of UI components. All CSS and data are passed as props - nothing is hardcoded.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {components.map((component) => (
-            <Link
+            <div
               key={component.id}
-              href={`/components/${component.id}`}
-              className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] cursor-pointer flex flex-col h-full"
+              className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] flex flex-col h-full"
             >
               <div className="p-5 flex-grow">
-                <div className="flex items-start">
+                <div className="flex items-start mb-4">
                   <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12 sm:w-14 sm:h-14" />
                   <div className="ml-3 sm:ml-4 flex-grow">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{component.name}</h3>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">{component.description}</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                      {component.name}
+                    </h3>
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
+                      {component.description}
+                    </p>
                   </div>
                 </div>
-                <div className="mt-3 sm:mt-4">
-                  {/* Preview of the component */}
-                  <div className="mt-3 sm:mt-4">
-                    {component.id === 'card' && (
-                      <Card
-                        data={{
-                          title: "Sample Card",
-                          description: "Preview of the component",
-                          content: "This is how the component looks"
-                        }}
-                        style={{ container: "w-full max-w-[150px] sm:max-w-[180px] md:max-w-xs" }}
-                      />
-                    )}
-                    {component.id === 'button' && (
-                      <div className="flex space-x-2">
-                        <button className="px-3 py-1.5 bg-[#5f52ff] text-white rounded text-sm">Button</button>
-                        <button className="px-3 py-1.5 border border-[#5f52ff] text-[#5f52ff] rounded text-sm">Outline</button>
-                      </div>
-                    )}
-                    {component.id === 'modal' && (
-                      <div className="border border-gray-300 rounded p-3 bg-gray-50 w-32 h-24 flex items-center justify-center text-xs text-gray-500">
-                        Modal Preview
-                      </div>
-                    )}
-                  </div>
+                
+                {/* Live Preview */}
+                <div className="mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg p-4 flex justify-center items-center min-h-[120px]">
+                  {getComponentPreview(component.id)}
                 </div>
               </div>
+              
               <div className="p-5 border-t border-gray-100 dark:border-gray-700">
-                <div className="text-[#5f52ff] font-medium flex items-center justify-center sm:justify-start">
+                <Link
+                  href={`/component-library/${component.id}`}
+                  className="text-[#5f52ff] font-medium flex items-center justify-center sm:justify-start hover:text-indigo-700 transition-colors"
+                >
                   View Variants
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </div>
+                </Link>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Core Card Component - Pure component with NO hardcoded CSS or data
+// Define TypeScript interfaces
 interface CardCSS {
   container: string;
   header: string;
@@ -59,3 +59,23 @@ const Card: React.FC<CardProps> = ({ css, data }) => {
 };
 
 export default Card;
+
+// Usage Example:
+// <Card 
+//   css={{
+//     container: "bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200",
+//     header: "p-4 sm:p-5 md:p-6 pb-3 sm:pb-4",
+//     title: "text-lg sm:text-xl font-bold text-black mb-1 sm:mb-2",
+//     description: "text-gray-600 text-xs sm:text-sm",
+//     content: "p-4 sm:p-5 md:p-6 pt-2 sm:pt-3",
+//     footer: "p-4 sm:p-5 md:p-6 pt-2 sm:pt-3 text-xs sm:text-sm text-[#5f52ff]",
+//     image: "w-full h-auto object-cover"
+//   }}
+//   data={{
+//     title: "Card Title",
+//     description: "Card description",
+//     content: "Main content here",
+//     footer: "Footer text",
+//     imageUrl: "https://example.com/image.jpg"
+//   }}
+// />
