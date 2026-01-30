@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Card from '@/components/Card';
 import { components } from '@/config/components';
 import { basicCardCSS, basicCardData } from '@/components/variant/card';
+import { newsSliderCSS, newsSliderData, NewsSliderComponent } from '@/components/variant/slider';
 
 const ComponentLibraryPage = () => {
   // Dynamic component previews - driven by config
@@ -12,6 +13,8 @@ const ComponentLibraryPage = () => {
     switch (componentId) {
       case 'card':
         return <Card css={basicCardCSS} data={basicCardData} />;
+      case 'slider':
+        return <NewsSliderComponent css={newsSliderCSS} data={newsSliderData} />;
       default:
         return null;
     }
@@ -67,7 +70,9 @@ const ComponentLibraryPage = () => {
                 </div>
                 
                 {/* Live Preview */}
-                <div className="mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg p-4 flex justify-center items-center min-h-[120px]">
+                <div className={`mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg ${
+                  component.id === 'slider' ? 'p-3 min-h-[320px] overflow-hidden flex items-center justify-center' : 'p-4 min-h-[120px] flex justify-center items-center'
+                }`}>
                   {getComponentPreview(component.id)}
                 </div>
               </div>

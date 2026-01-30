@@ -38,6 +38,12 @@ export const variants: VariantConfig[] = [
     name: 'Data Card',
     description: 'Minimalist card displaying a number with label',
     componentId: 'card'
+  },
+  {
+    id: 'news',
+    name: 'News Slider',
+    description: 'Carousel slider with news cards and navigation arrows',
+    componentId: 'slider'
   }
   // Add more variants here as they are created
 ];

@@ -19,6 +19,11 @@ import {
   dataCardCSS,
   dataCardData
 } from '@/components/variant/card';
+import { 
+  newsSliderCSS,
+  newsSliderData,
+  NewsSliderComponent
+} from '@/components/variant/slider';
 
 const VariantPage = () => {
   const params = useParams();
@@ -61,6 +66,13 @@ const VariantPage = () => {
             return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
           case 'dataCard':
             return { css: dataCardCSS, data: dataCardData };
+          default:
+            return null;
+        }
+      case 'slider':
+        switch (variantId) {
+          case 'news':
+            return { css: newsSliderCSS, data: newsSliderData };
           default:
             return null;
         }
@@ -152,6 +164,122 @@ const Card: React.FC<CardProps> = ({ css, data }) => {
 };
 
 export default Card;`;
+      case 'slider':
+        return `'use client';
+
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+// Define TypeScript interfaces
+interface SliderCSS {
+  container: string;
+  slide: string;
+  image: string;
+  overlay: string;
+  title: string;
+  category: string;
+  navigation: string;
+  prevButton: string;
+  nextButton: string;
+}
+
+interface SlideData {
+  imageUrl: string;
+  imageAlt?: string;
+  title: string;
+  category?: string;
+}
+
+interface SliderData {
+  slides: SlideData[];
+}
+
+interface SliderProps {
+  css: SliderCSS;
+  data: SliderData;
+}
+
+const Slider: React.FC<SliderProps> = ({ css, data }) => {
+  const swiperRef = React.useRef<SwiperType | null>(null);
+
+  return (
+    <div className="w-full max-w-6xl mx-auto">
+      <Swiper
+        modules={[Navigation]}
+        spaceBetween={20}
+        slidesPerView={1.2}
+        centeredSlides={true}
+        loop={true}
+        breakpoints={{
+          640: {
+            slidesPerView: 1.5,
+            spaceBetween: 24
+          },
+          768: {
+            slidesPerView: 1.8,
+            spaceBetween: 30
+          },
+          1024: {
+            slidesPerView: 2.2,
+            spaceBetween: 40
+          }
+        }}
+        navigation={{
+          prevEl: '.swiper-button-prev-custom',
+          nextEl: '.swiper-button-next-custom'
+        }}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
+        className="w-full"
+      >
+        {data.slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            <div className={css.slide}>
+              <img 
+                src={slide.imageUrl} 
+                alt={slide.imageAlt || slide.title} 
+                className={css.image}
+              />
+              <div className={css.overlay}>
+                {slide.category && <p className={css.category}>{slide.category}</p>}
+                {slide.title && <h3 className={css.title}>{slide.title}</h3>}
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      
+      {/* Custom Navigation */}
+      <div className={css.navigation}>
+        <button 
+          className={\`\${css.prevButton} swiper-button-prev-custom\`}
+          aria-label="Previous slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button 
+          className={\`\${css.nextButton} swiper-button-next-custom\`}
+          aria-label="Next slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Slider;`;
       default:
         return '// Component code not available';
     }
@@ -161,8 +289,44 @@ export default Card;`;
 
   // Dynamic usage example - handle React components in footer
   const getUsageExample = () => {
+    if (componentId === 'slider') {
+      return `// Example: Using ${variant.name} in your application
+
+// Step 1: Install Swiper (if not already installed)
+// npm install swiper
+
+// Step 2: Import the component and Swiper dependencies
+import Slider from '@/components/user_visible_code/Slider';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+function MyPage() {
+  // Step 3: Define CSS object with all styling classes
+  const sliderCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+
+  // Step 4: Define data object with slides array
+  const sliderData = ${JSON.stringify(variantConfig.data, null, 4)};
+
+  // Step 5: Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <Slider css={sliderCSS} data={sliderData} />
+    </div>
+  );
+}
+
+export default MyPage;
+
+// Additional Configuration Options:
+// - slidesPerView: Number of slides visible at once (default: 1.2)
+// - spaceBetween: Space between slides in pixels (default: 20)
+// - centeredSlides: Center the active slide (default: true)
+// - loop: Enable infinite loop (default: true)
+// - breakpoints: Responsive breakpoints for different screen sizes`;
+    }
+    
     // If footer is a React component, show how to import and use it
-    if (variantId === 'news') {
+    if (variantId === 'news' && componentId === 'card') {
       return `// Example: Using ${variant.name} in your application
 
 import Card from '@/components/Card';
@@ -275,12 +439,18 @@ export default MyPage;`;
           {/* Live Preview Section */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Preview</h2>
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 flex justify-center items-center min-h-[200px]">
-              {variantId === 'news' ? (
-                <NewsCardComponent css={variantConfig.css} data={variantConfig.data} />
-              ) : (
-                <Card css={variantConfig.css} data={variantConfig.data} />
-              )}
+            <div className={`bg-gray-50 dark:bg-gray-700 rounded-lg ${
+              componentId === 'slider' ? 'p-8 min-h-[500px] overflow-hidden' : 'p-6 min-h-[200px] flex justify-center items-center'
+            }`}>
+              {componentId === 'slider' && variantId === 'news' ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <NewsSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                </div>
+              ) : variantId === 'news' && componentId === 'card' ? (
+                <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : componentId === 'card' ? (
+                <Card css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : null}
             </div>
           </div>
 
@@ -302,6 +472,69 @@ export default MyPage;`;
               </pre>
             </div>
           </div>
+
+          {/* How to Use Section - Only for Slider */}
+          {componentId === 'slider' && (
+            <div className="mb-8 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">How to Use - Step by Step</h2>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">1</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Install Swiper</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Install the Swiper package using npm or yarn:</p>
+                    <div className="bg-gray-900 rounded-lg p-3 mt-2">
+                      <code className="text-white text-sm">npm install swiper</code>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">2</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Import Required Dependencies</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Import the Slider component and Swiper CSS styles:</p>
+                    <div className="bg-gray-900 rounded-lg p-3">
+                      <pre className="text-white text-xs overflow-x-auto">
+                        <code>{`import Slider from '@/components/user_visible_code/Slider';
+import 'swiper/css';
+import 'swiper/css/navigation';`}</code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">3</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Define CSS Object</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Create a CSS object with all styling classes for the slider, slides, images, overlays, navigation buttons, etc.</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">4</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Define Data Object</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Create a data object with a slides array. Each slide should have imageUrl, imageAlt, title, and category properties.</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">5</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Use the Component</h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm">Render the Slider component and pass the css and data props:</p>
+                    <div className="bg-gray-900 rounded-lg p-3 mt-2">
+                      <pre className="text-white text-xs overflow-x-auto">
+                        <code>{`<Slider css={sliderCSS} data={sliderData} />`}</code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Usage Example Section */}
           <div className="mb-8">

@@ -14,6 +14,12 @@ export const components: ComponentConfig[] = [
     name: 'Card',
     description: 'Versatile card component with customizable styles',
     category: 'Layout'
+  },
+  {
+    id: 'slider',
+    name: 'Slider',
+    description: 'Carousel slider component using Swiper with navigation',
+    category: 'Layout'
   }
   // Add more components here as they are created
 ];

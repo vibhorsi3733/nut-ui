@@ -19,6 +19,11 @@ import {
   dataCardCSS,
   dataCardData
 } from '@/components/variant/card';
+import { 
+  newsSliderCSS,
+  newsSliderData,
+  NewsSliderComponent
+} from '@/components/variant/slider';
 
 const ComponentPage = () => {
   const params = useParams();
@@ -61,6 +66,13 @@ const ComponentPage = () => {
             return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
           case 'dataCard':
             return { css: dataCardCSS, data: dataCardData };
+          default:
+            return null;
+        }
+      case 'slider':
+        switch (variantId) {
+          case 'news':
+            return { css: newsSliderCSS, data: newsSliderData };
           default:
             return null;
         }
@@ -132,12 +144,18 @@ const ComponentPage = () => {
                     </p>
                     
                     {/* Live Preview */}
-                    <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 flex justify-center items-center min-h-[150px]">
-                      {variant.id === 'news' ? (
-                        <NewsCardComponent css={variantConfig.css} data={variantConfig.data} />
-                      ) : (
-                        <Card css={variantConfig.css} data={variantConfig.data} />
-                      )}
+                    <div className={`bg-gray-50 dark:bg-gray-900 rounded-lg ${
+                      componentId === 'slider' ? 'p-6 min-h-[450px] overflow-hidden' : 'p-4 min-h-[150px] flex justify-center items-center'
+                    }`}>
+                      {componentId === 'slider' && variant.id === 'news' ? (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <NewsSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                        </div>
+                      ) : variant.id === 'news' && componentId === 'card' ? (
+                        <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'card' ? (
+                        <Card css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : null}
                     </div>
                   </div>
                   
