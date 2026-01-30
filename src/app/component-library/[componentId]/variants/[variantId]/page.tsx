@@ -22,7 +22,13 @@ import {
 import { 
   newsSliderCSS,
   newsSliderData,
-  NewsSliderComponent
+  NewsSliderComponent,
+  matchScoreCardSliderCSS,
+  matchScoreCardSliderData,
+  MatchScoreCardSliderComponent,
+  matchScoreStackSliderCSS,
+  matchScoreStackSliderData,
+  MatchScoreStackSliderComponent
 } from '@/components/variant/slider';
 
 const VariantPage = () => {
@@ -73,6 +79,10 @@ const VariantPage = () => {
         switch (variantId) {
           case 'news':
             return { css: newsSliderCSS, data: newsSliderData };
+          case 'matchScoreCard':
+            return { css: matchScoreCardSliderCSS, data: matchScoreCardSliderData };
+          case 'matchScoreStack':
+            return { css: matchScoreStackSliderCSS, data: matchScoreStackSliderData };
           default:
             return null;
         }
@@ -440,11 +450,23 @@ export default MyPage;`;
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Preview</h2>
             <div className={`bg-gray-50 dark:bg-gray-700 rounded-lg ${
-              componentId === 'slider' ? 'p-8 min-h-[500px] overflow-hidden' : 'p-6 min-h-[200px] flex justify-center items-center'
+              componentId === 'slider' && (variantId === 'matchScoreCard' || variantId === 'matchScoreStack')
+                ? 'p-4 sm:p-6 md:p-8 min-h-[500px] sm:min-h-[550px] overflow-hidden'
+                : componentId === 'slider'
+                ? 'p-8 min-h-[500px] overflow-hidden'
+                : 'p-6 min-h-[200px] flex justify-center items-center'
             }`}>
               {componentId === 'slider' && variantId === 'news' ? (
                 <div className="w-full h-full flex items-center justify-center">
                   <NewsSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                </div>
+              ) : componentId === 'slider' && variantId === 'matchScoreCard' ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <MatchScoreCardSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                </div>
+              ) : componentId === 'slider' && variantId === 'matchScoreStack' ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <MatchScoreStackSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
                 </div>
               ) : variantId === 'news' && componentId === 'card' ? (
                 <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />

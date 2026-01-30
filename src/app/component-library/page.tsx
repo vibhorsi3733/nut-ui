@@ -71,9 +71,15 @@ const ComponentLibraryPage = () => {
                 
                 {/* Live Preview */}
                 <div className={`mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg ${
-                  component.id === 'slider' ? 'p-3 min-h-[320px] overflow-hidden flex items-center justify-center' : 'p-4 min-h-[120px] flex justify-center items-center'
+                  component.id === 'slider' ? 'p-2 sm:p-3 min-h-[280px] sm:min-h-[320px] overflow-hidden' : 'p-4 min-h-[120px] flex justify-center items-center'
                 }`}>
-                  {getComponentPreview(component.id)}
+                  {component.id === 'slider' ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      {getComponentPreview(component.id)}
+                    </div>
+                  ) : (
+                    getComponentPreview(component.id)
+                  )}
                 </div>
               </div>
               

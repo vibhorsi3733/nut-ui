@@ -12,14 +12,14 @@ import 'swiper/css/navigation';
 // News Slider Variant Configuration - Carousel with news cards
 export const newsSliderCSS = {
   container: "relative w-full",
-  slide: "relative overflow-hidden rounded-xl h-[300px] sm:h-[350px] md:h-[400px]",
+  slide: "relative overflow-hidden rounded-xl h-[250px] sm:h-[300px] md:h-[350px]",
   image: "w-full h-full object-cover",
-  overlay: "absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent",
-  title: "text-white text-base sm:text-lg md:text-xl font-bold mb-2 line-clamp-2",
-  category: "text-white/80 text-xs uppercase tracking-wider mb-1",
-  navigation: "absolute bottom-4 right-4 z-20 flex gap-2",
-  prevButton: "w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-300 cursor-pointer",
-  nextButton: "w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-300 cursor-pointer"
+  overlay: "absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent",
+  title: "text-white text-sm sm:text-base md:text-lg font-bold mb-1 sm:mb-2 line-clamp-2",
+  category: "text-white/80 text-[10px] sm:text-xs uppercase tracking-wider mb-1",
+  navigation: "absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 flex gap-2",
+  prevButton: "w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-300 cursor-pointer",
+  nextButton: "w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-300 cursor-pointer"
 };
 
 export const newsSliderData = {
@@ -54,25 +54,25 @@ export const NewsSliderComponent: React.FC<NewsSliderProps> = ({ css, data }) =>
   const swiperRef = React.useRef<SwiperType | null>(null);
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative max-w-full">
       <Swiper
         modules={[Navigation]}
-        spaceBetween={16}
-        slidesPerView={1.1}
+        spaceBetween={12}
+        slidesPerView={1.05}
         centeredSlides={true}
         loop={true}
         breakpoints={{
           640: {
-            slidesPerView: 1.2,
-            spaceBetween: 20
+            slidesPerView: 1.1,
+            spaceBetween: 16
           },
           768: {
-            slidesPerView: 1.3,
-            spaceBetween: 24
+            slidesPerView: 1.15,
+            spaceBetween: 20
           },
           1024: {
-            slidesPerView: 1.5,
-            spaceBetween: 30
+            slidesPerView: 1.2,
+            spaceBetween: 24
           }
         }}
         navigation={{
