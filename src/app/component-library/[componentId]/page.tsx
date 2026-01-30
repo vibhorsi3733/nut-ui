@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
+import Table from '@/components/Table';
 import NewsCardComponent from '@/components/variant/card/NewsCardComponent';
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
@@ -30,6 +31,10 @@ import {
   matchScoreStackSliderData,
   MatchScoreStackSliderComponent
 } from '@/components/variant/slider';
+import {
+  scoreBoardCSS,
+  scoreBoardData
+} from '@/components/variant/table';
 
 const ComponentPage = () => {
   const params = useParams();
@@ -83,6 +88,13 @@ const ComponentPage = () => {
             return { css: matchScoreCardSliderCSS, data: matchScoreCardSliderData };
           case 'matchScoreStack':
             return { css: matchScoreStackSliderCSS, data: matchScoreStackSliderData };
+          default:
+            return null;
+        }
+      case 'table':
+        switch (variantId) {
+          case 'scoreBoard':
+            return { css: scoreBoardCSS, data: scoreBoardData };
           default:
             return null;
         }
@@ -177,6 +189,8 @@ const ComponentPage = () => {
                         <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
                       ) : componentId === 'card' ? (
                         <Card css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'table' ? (
+                        <Table css={variantConfig.css as any} data={variantConfig.data as any} />
                       ) : null}
                     </div>
                   </div>

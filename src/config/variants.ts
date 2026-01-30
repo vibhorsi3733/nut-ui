@@ -56,6 +56,12 @@ export const variants: VariantConfig[] = [
     name: 'Match Score Stack Slider',
     description: 'Cricket match score slider showing adjacent cards on sides',
     componentId: 'slider'
+  },
+  {
+    id: 'scoreBoard',
+    name: 'Scoreboard Table',
+    description: 'Sports league standings table with team rankings',
+    componentId: 'table'
   }
   // Add more variants here as they are created
 ];

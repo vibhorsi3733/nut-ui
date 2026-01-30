@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
+import Table from '@/components/Table';
 import NewsCardComponent from '@/components/variant/card/NewsCardComponent';
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
@@ -30,6 +31,10 @@ import {
   matchScoreStackSliderData,
   MatchScoreStackSliderComponent
 } from '@/components/variant/slider';
+import {
+  scoreBoardCSS,
+  scoreBoardData
+} from '@/components/variant/table';
 
 const VariantPage = () => {
   const params = useParams();
@@ -83,6 +88,13 @@ const VariantPage = () => {
             return { css: matchScoreCardSliderCSS, data: matchScoreCardSliderData };
           case 'matchScoreStack':
             return { css: matchScoreStackSliderCSS, data: matchScoreStackSliderData };
+          default:
+            return null;
+        }
+      case 'table':
+        switch (variantId) {
+          case 'scoreBoard':
+            return { css: scoreBoardCSS, data: scoreBoardData };
           default:
             return null;
         }
@@ -290,6 +302,88 @@ const Slider: React.FC<SliderProps> = ({ css, data }) => {
 };
 
 export default Slider;`;
+      case 'table':
+        return `import React from 'react';
+
+// Define TypeScript interfaces
+interface TableCSS {
+  container: string;
+  table: string;
+  thead: string;
+  tbody: string;
+  headerRow: string;
+  headerCell: string;
+  row: string;
+  cell: string;
+  highlightedRow?: string;
+}
+
+interface TableColumn {
+  key: string;
+  label: string;
+  align?: 'left' | 'center' | 'right';
+}
+
+interface TableRow {
+  [key: string]: string | number | React.ReactNode;
+}
+
+interface TableData {
+  columns: TableColumn[];
+  rows: TableRow[];
+  highlightedRowIndex?: number;
+}
+
+interface TableProps {
+  css: TableCSS;
+  data: TableData;
+}
+
+const Table: React.FC<TableProps> = ({ css, data }) => {
+  return (
+    <div className={css.container}>
+      <table className={css.table}>
+        <thead className={css.thead}>
+          <tr className={css.headerRow}>
+            {data.columns.map((column) => (
+              <th
+                key={column.key}
+                className={css.headerCell}
+                style={{ textAlign: column.align || 'left' }}
+              >
+                {column.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className={css.tbody}>
+          {data.rows.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              className={\`\${css.row} \${
+                rowIndex === data.highlightedRowIndex && css.highlightedRow
+                  ? css.highlightedRow
+                  : ''
+              }\`}
+            >
+              {data.columns.map((column) => (
+                <td
+                  key={column.key}
+                  className={css.cell}
+                  style={{ textAlign: column.align || 'left' }}
+                >
+                  {row[column.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Table;`;
       default:
         return '// Component code not available';
     }
@@ -366,6 +460,29 @@ function MyPage() {
   return (
     <div className="container mx-auto p-4">
       <Card css={cardCSS} data={cardData} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+    }
+    
+    if (componentId === 'table') {
+      return `// Example: Using ${variant.name} in your application
+
+import Table from '@/components/user_visible_code/Table';
+
+function MyPage() {
+  // Define CSS object with all styling classes
+  const tableCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+
+  // Define data object with columns and rows
+  const tableData = ${JSON.stringify(variantConfig.data, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <Table css={tableCSS} data={tableData} />
     </div>
   );
 }
@@ -472,6 +589,8 @@ export default MyPage;`;
                 <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
               ) : componentId === 'card' ? (
                 <Card css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : componentId === 'table' ? (
+                <Table css={variantConfig.css as any} data={variantConfig.data as any} />
               ) : null}
             </div>
           </div>

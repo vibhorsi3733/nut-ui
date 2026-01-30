@@ -3,9 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import Card from '@/components/Card';
+import Table from '@/components/Table';
 import { components } from '@/config/components';
 import { basicCardCSS, basicCardData } from '@/components/variant/card';
 import { newsSliderCSS, newsSliderData, NewsSliderComponent } from '@/components/variant/slider';
+import { scoreBoardCSS, scoreBoardData } from '@/components/variant/table';
 
 const ComponentLibraryPage = () => {
   // Dynamic component previews - driven by config
@@ -15,6 +17,8 @@ const ComponentLibraryPage = () => {
         return <Card css={basicCardCSS} data={basicCardData} />;
       case 'slider':
         return <NewsSliderComponent css={newsSliderCSS} data={newsSliderData} />;
+      case 'table':
+        return <Table css={scoreBoardCSS} data={scoreBoardData} />;
       default:
         return null;
     }
