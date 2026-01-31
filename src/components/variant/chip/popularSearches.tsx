@@ -54,7 +54,7 @@ export const PopularSearchesComponent: React.FC<PopularSearchesProps> = ({ css, 
       </div>
 
       {/* Chips container - Left to Right in single row */}
-      <div className="w-full max-w-4xl flex flex-row items-center justify-start gap-3 sm:gap-4 overflow-x-auto">
+      <div className="w-full max-w-4xl flex flex-row items-center justify-start gap-3 sm:gap-4 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {data.chips.map((chipData, index) => (
           <React.Fragment key={chipData.label}>
             <Chip 

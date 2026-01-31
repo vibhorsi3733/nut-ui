@@ -1077,7 +1077,7 @@ import 'swiper/css/navigation';`}</code>
 
           {/* Editable CSS and Data Section */}
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Playground code edit here before copy the output</h2>
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Edit Props</h2>
             {parseError && (
               <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm">
                 {parseError}
