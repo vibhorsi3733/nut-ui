@@ -5,7 +5,10 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
 import Table from '@/components/Table';
+import Chip from '@/components/Chip';
+import Map from '@/components/Map';
 import NewsCardComponent from '@/components/variant/card/NewsCardComponent';
+import PriceCardComponent from '@/components/variant/card/PriceCardComponent';
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
 import { 
@@ -18,7 +21,9 @@ import {
   cardLowerHeadingCSS,
   cardLowerHeadingData,
   dataCardCSS,
-  dataCardData
+  dataCardData,
+  priceCardVarientCSS,
+  priceCardVarientData
 } from '@/components/variant/card';
 import { 
   newsSliderCSS,
@@ -35,6 +40,24 @@ import {
   scoreBoardCSS,
   scoreBoardData
 } from '@/components/variant/table';
+import {
+  popularSearchesCSS,
+  popularSearchesData,
+  PopularSearchesComponent
+} from '@/components/variant/chip';
+import {
+  videoCardCSS,
+  videoCardData,
+  VideoCardComponent
+} from '@/components/variant/clipCard';
+import {
+  basicMapCSS,
+  basicMapData,
+  BasicMapComponent,
+  googleMapCSS,
+  googleMapData,
+  GoogleMapComponent
+} from '@/components/variant/map';
 
 const ComponentPage = () => {
   const params = useParams();
@@ -77,6 +100,8 @@ const ComponentPage = () => {
             return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
           case 'dataCard':
             return { css: dataCardCSS, data: dataCardData };
+          case 'priceCardVarient':
+            return { css: priceCardVarientCSS, data: priceCardVarientData };
           default:
             return null;
         }
@@ -95,6 +120,29 @@ const ComponentPage = () => {
         switch (variantId) {
           case 'scoreBoard':
             return { css: scoreBoardCSS, data: scoreBoardData };
+          default:
+            return null;
+        }
+      case 'chip':
+        switch (variantId) {
+          case 'popularSearches':
+            return { css: popularSearchesCSS, data: popularSearchesData };
+          default:
+            return null;
+        }
+      case 'clipCard':
+        switch (variantId) {
+          case 'videoCard':
+            return { css: videoCardCSS, data: videoCardData };
+          default:
+            return null;
+        }
+      case 'map':
+        switch (variantId) {
+          case 'basicMap':
+            return { css: basicMapCSS, data: basicMapData };
+          case 'googleMap':
+            return { css: googleMapCSS, data: googleMapData };
           default:
             return null;
         }
@@ -170,7 +218,9 @@ const ComponentPage = () => {
                       componentId === 'slider' && variant.id === 'matchScoreCard' 
                         ? 'p-3 sm:p-4 md:p-6 min-h-[480px] sm:min-h-[500px] overflow-hidden' 
                         : componentId === 'slider' 
-                        ? 'p-6 min-h-[450px] overflow-hidden' 
+                        ? 'p-6 min-h-[450px] overflow-hidden'
+                        : componentId === 'table'
+                        ? 'p-2 sm:p-3 overflow-x-auto'
                         : 'p-4 min-h-[150px] flex justify-center items-center'
                     }`}>
                       {componentId === 'slider' && variant.id === 'news' ? (
@@ -187,10 +237,22 @@ const ComponentPage = () => {
                         </div>
                       ) : variant.id === 'news' && componentId === 'card' ? (
                         <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : variant.id === 'priceCardVarient' && componentId === 'card' ? (
+                        <PriceCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
                       ) : componentId === 'card' ? (
                         <Card css={variantConfig.css as any} data={variantConfig.data as any} />
                       ) : componentId === 'table' ? (
                         <Table css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'chip' ? (
+                        <PopularSearchesComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'clipCard' ? (
+                        <VideoCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'map' && variant.id === 'basicMap' ? (
+                        <BasicMapComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'map' && variant.id === 'googleMap' ? (
+                        <GoogleMapComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                      ) : componentId === 'map' ? (
+                        <BasicMapComponent css={variantConfig.css as any} data={variantConfig.data as any} />
                       ) : null}
                     </div>
                   </div>

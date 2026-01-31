@@ -2,14 +2,14 @@ import React from 'react';
 
 // Scoreboard Table Variant Configuration
 export const scoreBoardCSS = {
-  container: "w-full overflow-x-auto",
-  table: "w-full border-collapse",
+  container: "w-full overflow-x-auto min-w-0",
+  table: "w-full min-w-[600px] border-collapse",
   thead: "bg-gray-700",
   tbody: "bg-white",
   headerRow: "",
-  headerCell: "px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-white uppercase tracking-wider",
+  headerCell: "px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 text-left text-[10px] sm:text-xs md:text-sm font-semibold text-white uppercase tracking-wider whitespace-nowrap",
   row: "border-b border-gray-200 hover:bg-gray-50 transition-colors",
-  cell: "px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-900",
+  cell: "px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 text-[10px] sm:text-xs md:text-sm text-gray-900 whitespace-nowrap",
   highlightedRow: "bg-pink-500 hover:bg-pink-600"
 };
 

@@ -4,10 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import Card from '@/components/Card';
 import Table from '@/components/Table';
+import Chip from '@/components/Chip';
+import Map from '@/components/Map';
 import { components } from '@/config/components';
 import { basicCardCSS, basicCardData } from '@/components/variant/card';
 import { newsSliderCSS, newsSliderData, NewsSliderComponent } from '@/components/variant/slider';
 import { scoreBoardCSS, scoreBoardData } from '@/components/variant/table';
+import { popularSearchesCSS, popularSearchesData, PopularSearchesComponent } from '@/components/variant/chip';
+import { videoCardCSS, videoCardData, VideoCardComponent } from '@/components/variant/clipCard';
+import { basicMapCSS, basicMapData, BasicMapComponent } from '@/components/variant/map';
 
 const ComponentLibraryPage = () => {
   // Dynamic component previews - driven by config
@@ -19,6 +24,12 @@ const ComponentLibraryPage = () => {
         return <NewsSliderComponent css={newsSliderCSS} data={newsSliderData} />;
       case 'table':
         return <Table css={scoreBoardCSS} data={scoreBoardData} />;
+      case 'chip':
+        return <PopularSearchesComponent css={popularSearchesCSS} data={popularSearchesData} />;
+      case 'clipCard':
+        return <VideoCardComponent css={videoCardCSS} data={videoCardData} />;
+      case 'map':
+        return <BasicMapComponent css={basicMapCSS} data={basicMapData} />;
       default:
         return null;
     }
@@ -75,7 +86,11 @@ const ComponentLibraryPage = () => {
                 
                 {/* Live Preview */}
                 <div className={`mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg ${
-                  component.id === 'slider' ? 'p-2 sm:p-3 min-h-[280px] sm:min-h-[320px] overflow-hidden' : 'p-4 min-h-[120px] flex justify-center items-center'
+                  component.id === 'slider' 
+                    ? 'p-2 sm:p-3 min-h-[280px] sm:min-h-[320px] overflow-hidden' 
+                    : component.id === 'table'
+                    ? 'p-2 sm:p-3 overflow-x-auto'
+                    : 'p-4 min-h-[120px] flex justify-center items-center'
                 }`}>
                   {component.id === 'slider' ? (
                     <div className="w-full h-full flex items-center justify-center">

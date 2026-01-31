@@ -40,6 +40,12 @@ export const variants: VariantConfig[] = [
     componentId: 'card'
   },
   {
+    id: 'priceCardVarient',
+    name: 'Price Card',
+    description: 'Product card with image, price, discount banner, and buy button',
+    componentId: 'card'
+  },
+  {
     id: 'news',
     name: 'News Slider',
     description: 'Carousel slider with news cards and navigation arrows',
@@ -62,6 +68,30 @@ export const variants: VariantConfig[] = [
     name: 'Scoreboard Table',
     description: 'Sports league standings table with team rankings',
     componentId: 'table'
+  },
+  {
+    id: 'popularSearches',
+    name: 'Popular Searches Chip',
+    description: 'Chip component for displaying popular search terms',
+    componentId: 'chip'
+  },
+  {
+    id: 'videoCard',
+    name: 'Video Card',
+    description: 'Video card with thumbnail, play button, login badge, caption, date, and share button',
+    componentId: 'clipCard'
+  },
+  {
+    id: 'basicMap',
+    name: 'Basic Map',
+    description: 'Interactive map displaying location by latitude and longitude coordinates using OpenStreetMap',
+    componentId: 'map'
+  },
+  {
+    id: 'googleMap',
+    name: 'Google Map',
+    description: 'Google Maps embed displaying location by latitude and longitude coordinates',
+    componentId: 'map'
   }
   // Add more variants here as they are created
 ];

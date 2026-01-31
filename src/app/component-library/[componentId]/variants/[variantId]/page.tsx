@@ -5,7 +5,10 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
 import Table from '@/components/Table';
+import Chip from '@/components/Chip';
+import Map from '@/components/Map';
 import NewsCardComponent from '@/components/variant/card/NewsCardComponent';
+import PriceCardComponent from '@/components/variant/card/PriceCardComponent';
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
 import { 
@@ -18,7 +21,9 @@ import {
   cardLowerHeadingCSS,
   cardLowerHeadingData,
   dataCardCSS,
-  dataCardData
+  dataCardData,
+  priceCardVarientCSS,
+  priceCardVarientData
 } from '@/components/variant/card';
 import { 
   newsSliderCSS,
@@ -35,6 +40,24 @@ import {
   scoreBoardCSS,
   scoreBoardData
 } from '@/components/variant/table';
+import {
+  popularSearchesCSS,
+  popularSearchesData,
+  PopularSearchesComponent
+} from '@/components/variant/chip';
+import {
+  videoCardCSS,
+  videoCardData,
+  VideoCardComponent
+} from '@/components/variant/clipCard';
+import {
+  basicMapCSS,
+  basicMapData,
+  BasicMapComponent,
+  googleMapCSS,
+  googleMapData,
+  GoogleMapComponent
+} from '@/components/variant/map';
 
 const VariantPage = () => {
   const params = useParams();
@@ -77,6 +100,8 @@ const VariantPage = () => {
             return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
           case 'dataCard':
             return { css: dataCardCSS, data: dataCardData };
+          case 'priceCardVarient':
+            return { css: priceCardVarientCSS, data: priceCardVarientData };
           default:
             return null;
         }
@@ -95,6 +120,29 @@ const VariantPage = () => {
         switch (variantId) {
           case 'scoreBoard':
             return { css: scoreBoardCSS, data: scoreBoardData };
+          default:
+            return null;
+        }
+      case 'chip':
+        switch (variantId) {
+          case 'popularSearches':
+            return { css: popularSearchesCSS, data: popularSearchesData };
+          default:
+            return null;
+        }
+      case 'clipCard':
+        switch (variantId) {
+          case 'videoCard':
+            return { css: videoCardCSS, data: videoCardData };
+          default:
+            return null;
+        }
+      case 'map':
+        switch (variantId) {
+          case 'basicMap':
+            return { css: basicMapCSS, data: basicMapData };
+          case 'googleMap':
+            return { css: googleMapCSS, data: googleMapData };
           default:
             return null;
         }
@@ -384,6 +432,193 @@ const Table: React.FC<TableProps> = ({ css, data }) => {
 };
 
 export default Table;`;
+      case 'chip':
+        return `import React from 'react';
+
+// Define TypeScript interfaces
+interface ChipCSS {
+  container: string;
+  chip: string;
+  text: string;
+  icon?: string;
+}
+
+interface ChipData {
+  label: string;
+  icon?: React.ReactNode;
+}
+
+interface ChipProps {
+  css: ChipCSS;
+  data: ChipData;
+}
+
+const Chip: React.FC<ChipProps> = ({ css, data }) => {
+  return (
+    <div className={css.container}>
+      <div className={css.chip}>
+        {data.icon && <span className={css.icon}>{data.icon}</span>}
+        <span className={css.text}>{data.label}</span>
+      </div>
+    </div>
+  );
+};
+
+export default Chip;`;
+      case 'clipCard':
+        return `import React from 'react';
+
+// Define TypeScript interfaces
+interface ClipCardCSS {
+  container: string;
+  imageWrapper: string;
+  image: string;
+  overlay: string;
+  loginBadge: string;
+  loginIcon: string;
+  loginText: string;
+  playButton: string;
+  bottomOverlay: string;
+  caption: string;
+  dateContainer: string;
+  dateIcon: string;
+  dateText: string;
+  shareButton: string;
+  shareIcon: string;
+  shareMenu?: string;
+  shareMenuItem?: string;
+  shareMenuIcon?: string;
+}
+
+interface ClipCardData {
+  imageUrl: string;
+  imageAlt?: string;
+  loginText?: string;
+  caption: string;
+  date: string;
+  redirectUrl: string;
+}
+
+interface ClipCardProps {
+  css: ClipCardCSS;
+  data: ClipCardData;
+}
+
+const ClipCard: React.FC<ClipCardProps> = ({ css, data }) => {
+  const handleClick = () => {
+    if (data.redirectUrl) {
+      window.open(data.redirectUrl, '_blank');
+    }
+  };
+
+  return (
+    <div className={css.container} onClick={handleClick}>
+      <div className={css.imageWrapper}>
+        <img 
+          src={data.imageUrl} 
+          alt={data.imageAlt || 'Video thumbnail'} 
+          className={css.image}
+        />
+        
+        {/* Login Badge - Top Left */}
+        {data.loginText && (
+          <div className={css.loginBadge}>
+            <svg className={css.loginIcon} fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+            <span className={css.loginText}>{data.loginText}</span>
+          </div>
+        )}
+
+        {/* Play Button - Center */}
+        <div className={css.playButton}>
+          <svg className="w-full h-full" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+
+        {/* Bottom Overlay */}
+        <div className={css.bottomOverlay}>
+          <p className={css.caption}>{data.caption}</p>
+          <div className={css.dateContainer}>
+            <svg className={css.dateIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className={css.dateText}>{data.date}</span>
+          </div>
+          <button className={css.shareButton}>
+            <svg className={css.shareIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ClipCard;`;
+      case 'map':
+        return `import React, { useEffect, useRef } from 'react';
+
+// Define TypeScript interfaces
+interface MapCSS {
+  container: string;
+  map: string;
+}
+
+interface MapData {
+  latitude: number;
+  longitude: number;
+  zoom?: number;
+  markerTitle?: string;
+  markerDescription?: string;
+}
+
+interface MapProps {
+  css: MapCSS;
+  data: MapData;
+}
+
+const Map: React.FC<MapProps> = ({ css, data }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Initialize map using OpenStreetMap
+    const latOffset = 0.01;
+    const lonOffset = 0.01;
+    const bbox = \`\${data.longitude - lonOffset},\${data.latitude - latOffset},\${data.longitude + lonOffset},\${data.latitude + latOffset}\`;
+    
+    const iframe = document.createElement('iframe');
+    iframe.src = \`https://www.openstreetmap.org/export/embed.html?bbox=\${bbox}&layer=mapnik&marker=\${data.latitude},\${data.longitude}\`;
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.frameBorder = '0';
+    iframe.style.border = '0';
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('aria-label', \`Map showing location at \${data.latitude}, \${data.longitude}\`);
+    iframe.title = data.markerTitle || 'Map location';
+
+    mapRef.current.innerHTML = '';
+    mapRef.current.appendChild(iframe);
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.innerHTML = '';
+      }
+    };
+  }, [data.latitude, data.longitude, data.markerTitle]);
+
+  return (
+    <div className={css.container}>
+      <div ref={mapRef} className={css.map} />
+    </div>
+  );
+};
+
+export default Map;`;
       default:
         return '// Component code not available';
     }
@@ -433,7 +668,7 @@ export default MyPage;
     if (variantId === 'news' && componentId === 'card') {
       return `// Example: Using ${variant.name} in your application
 
-import Card from '@/components/Card';
+import Card from '@/components/user_visible_code/Card';
 import NewsCardFooter from '@/components/variant/card/NewsCardFooter';
 
 function MyPage() {
@@ -490,9 +725,79 @@ function MyPage() {
 export default MyPage;`;
     }
     
+    if (componentId === 'clipCard') {
+      return `// Example: Using ${variant.name} in your application
+
+import ClipCard from '@/components/user_visible_code/ClipCard';
+
+function MyPage() {
+  // Define CSS object with all styling classes
+  const clipCardCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+
+  // Define data object with video information
+  const clipCardData = ${JSON.stringify(variantConfig.data, null, 4)};
+
+  // Use the component
+  // Note: Clicking the card will redirect to the URL specified in redirectUrl
+  return (
+    <div className="container mx-auto p-4">
+      <ClipCard css={clipCardCSS} data={clipCardData} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+    }
+    
+    if (componentId === 'chip') {
+      return `// Example: Using ${variant.name} in your application
+
+import Chip from '@/components/user_visible_code/Chip';
+
+function MyPage() {
+  // Define CSS object with all styling classes
+  const chipCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+
+  // Define data object with chip information
+  const chipData = ${JSON.stringify(variantConfig.data, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <Chip css={chipCSS} data={chipData} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+    }
+    
+    if (componentId === 'map') {
+      return `// Example: Using ${variant.name} in your application
+
+import Map from '@/components/user_visible_code/Map';
+
+function MyPage() {
+  // Define CSS object with all styling classes
+  const mapCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+
+  // Define data object with latitude and longitude
+  const mapData = ${JSON.stringify(variantConfig.data, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <Map css={mapCSS} data={mapData} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+    }
+    
     return `// Example: Using ${variant.name} in your application
 
-import Card from '@/components/Card';
+import Card from '@/components/user_visible_code/Card';
 
 function MyPage() {
   // Define CSS object
@@ -571,6 +876,10 @@ export default MyPage;`;
                 ? 'p-4 sm:p-6 md:p-8 min-h-[500px] sm:min-h-[550px] overflow-hidden'
                 : componentId === 'slider'
                 ? 'p-8 min-h-[500px] overflow-hidden'
+                : componentId === 'table'
+                ? 'p-3 sm:p-4 md:p-6 overflow-x-auto'
+                : componentId === 'map'
+                ? 'p-3 sm:p-4 md:p-5 lg:p-6 min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[550px]'
                 : 'p-6 min-h-[200px] flex justify-center items-center'
             }`}>
               {componentId === 'slider' && variantId === 'news' ? (
@@ -587,10 +896,18 @@ export default MyPage;`;
                 </div>
               ) : variantId === 'news' && componentId === 'card' ? (
                 <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : variantId === 'priceCardVarient' && componentId === 'card' ? (
+                <PriceCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
               ) : componentId === 'card' ? (
                 <Card css={variantConfig.css as any} data={variantConfig.data as any} />
               ) : componentId === 'table' ? (
                 <Table css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : componentId === 'chip' ? (
+                <PopularSearchesComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : componentId === 'clipCard' ? (
+                <VideoCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+              ) : componentId === 'map' ? (
+                <BasicMapComponent css={variantConfig.css as any} data={variantConfig.data as any} />
               ) : null}
             </div>
           </div>
