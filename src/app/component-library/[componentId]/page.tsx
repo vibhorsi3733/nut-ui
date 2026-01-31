@@ -88,8 +88,6 @@ const ComponentPage = () => {
     switch (componentId) {
       case 'card':
         switch (variantId) {
-          case 'basic':
-            return { css: basicCardCSS, data: basicCardData };
           case 'image':
             return { css: imageCardCSS, data: imageCardData };
           case 'news':

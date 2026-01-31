@@ -4,8 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import Card from '@/components/Card';
 import { 
-  basicCardCSS, 
-  basicCardData,
   imageCardCSS,
   imageCardData,
   footerCardCSS,
@@ -14,13 +12,6 @@ import {
 
 const CardPage = () => {
   const variants = [
-    {
-      id: 'basic',
-      name: 'Basic Card',
-      description: 'Simple card with title and content',
-      css: basicCardCSS,
-      data: basicCardData
-    },
     {
       id: 'image',
       name: 'Card with Image',

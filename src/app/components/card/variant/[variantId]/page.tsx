@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
 import { 
-  basicCardCSS, 
-  basicCardData,
   imageCardCSS,
   imageCardData,
   footerCardCSS,
@@ -19,12 +17,6 @@ const CardVariantPage = () => {
   const [copied, setCopied] = useState(false);
 
   const variants: Record<string, { css: any; data: any; name: string; description: string }> = {
-    basic: {
-      css: basicCardCSS,
-      data: basicCardData,
-      name: 'Basic Card',
-      description: 'Simple card with title and content'
-    },
     image: {
       css: imageCardCSS,
       data: imageCardData,
