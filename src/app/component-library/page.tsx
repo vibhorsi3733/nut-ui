@@ -65,47 +65,47 @@ const ComponentLibraryPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
           {components.map((component) => (
             <div
               key={component.id}
               className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] flex flex-col h-full"
             >
-              <div className="p-5 flex-grow">
-                <div className="flex items-start mb-4">
-                  <div className="bg-gray-200 border-2 border-dashed rounded-xl w-12 h-12 sm:w-14 sm:h-14" />
-                  <div className="ml-3 sm:ml-4 flex-grow">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+              <div className="p-4 sm:p-5 flex-grow flex flex-col">
+                <div className="flex items-start mb-3 sm:mb-4">
+                  <div className="bg-gray-200 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0" />
+                  <div className="ml-3 flex-grow min-w-0">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white truncate">
                       {component.name}
                     </h3>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                       {component.description}
                     </p>
                   </div>
                 </div>
                 
-                {/* Live Preview */}
-                <div className={`mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg ${
+                {/* Live Preview - Standardized sizing */}
+                <div className={`mt-3 sm:mt-4 bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center overflow-hidden ${
                   component.id === 'slider' 
-                    ? 'p-2 sm:p-3 min-h-[280px] sm:min-h-[320px] overflow-hidden' 
+                    ? 'p-2 sm:p-3 h-[200px] sm:h-[220px] lg:h-[240px] xl:h-[220px] 2xl:h-[240px]' 
                     : component.id === 'table'
-                    ? 'p-2 sm:p-3 overflow-x-auto'
-                    : 'p-4 min-h-[120px] flex justify-center items-center'
+                    ? 'p-2 sm:p-3 h-[200px] sm:h-[220px] lg:h-[240px] xl:h-[220px] 2xl:h-[240px] overflow-x-auto'
+                    : component.id === 'map'
+                    ? 'p-2 sm:p-3 h-[200px] sm:h-[220px] lg:h-[240px] xl:h-[220px] 2xl:h-[240px]'
+                    : 'p-3 sm:p-4 h-[200px] sm:h-[220px] lg:h-[240px] xl:h-[220px] 2xl:h-[240px]'
                 }`}>
-                  {component.id === 'slider' ? (
-                    <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-full h-full flex items-center justify-center max-w-full">
+                    <div className="w-full max-w-full scale-90 sm:scale-95 lg:scale-100 xl:scale-95 2xl:scale-100">
                       {getComponentPreview(component.id)}
                     </div>
-                  ) : (
-                    getComponentPreview(component.id)
-                  )}
+                  </div>
                 </div>
               </div>
               
-              <div className="p-5 border-t border-gray-100 dark:border-gray-700">
+              <div className="p-4 sm:p-5 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
                 <Link
                   href={`/component-library/${component.id}`}
-                  className="text-[#5f52ff] font-medium flex items-center justify-center sm:justify-start hover:text-indigo-700 transition-colors"
+                  className="text-[#5f52ff] font-medium text-sm sm:text-base flex items-center justify-center sm:justify-start hover:text-indigo-700 transition-colors"
                 >
                   View Variants
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

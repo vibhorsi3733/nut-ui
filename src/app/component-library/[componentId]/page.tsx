@@ -194,7 +194,7 @@ const ComponentPage = () => {
         </div>
 
         {componentVariants.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
             {componentVariants.map((variant) => {
               const variantConfig = getVariantConfig(variant.id);
               if (!variantConfig) return null;
@@ -203,26 +203,30 @@ const ComponentPage = () => {
                 <Link
                   key={variant.id}
                   href={`/component-library/${componentId}/variants/${variant.id}`}
-                  className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] cursor-pointer"
+                  className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] cursor-pointer flex flex-col h-full"
                 >
-                  <div className="p-5">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  <div className="p-4 sm:p-5 flex-grow flex flex-col">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-2">
                       {variant.name}
                     </h3>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2">
                       {variant.description}
                     </p>
                     
-                    {/* Live Preview */}
-                    <div className={`bg-gray-50 dark:bg-gray-900 rounded-lg ${
+                    {/* Live Preview - Standardized sizing */}
+                    <div className={`bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center overflow-hidden flex-grow ${
                       componentId === 'slider' && variant.id === 'matchScoreCard' 
-                        ? 'p-3 sm:p-4 md:p-6 min-h-[480px] sm:min-h-[500px] overflow-hidden' 
+                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]' 
                         : componentId === 'slider' 
-                        ? 'p-6 min-h-[450px] overflow-hidden'
+                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]'
                         : componentId === 'table'
-                        ? 'p-2 sm:p-3 overflow-x-auto'
-                        : 'p-4 min-h-[150px] flex justify-center items-center'
+                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px] overflow-x-auto'
+                        : componentId === 'map'
+                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]'
+                        : 'p-3 sm:p-4 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]'
                     }`}>
+                      <div className="w-full h-full flex items-center justify-center max-w-full">
+                        <div className="w-full max-w-full scale-90 sm:scale-95 lg:scale-100 xl:scale-95 2xl:scale-100">
                       {componentId === 'slider' && variant.id === 'news' ? (
                         <div className="w-full h-full flex items-center justify-center">
                           <NewsSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
@@ -254,11 +258,13 @@ const ComponentPage = () => {
                       ) : componentId === 'map' ? (
                         <BasicMapComponent css={variantConfig.css as any} data={variantConfig.data as any} />
                       ) : null}
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="p-5 border-t border-gray-100 dark:border-gray-700">
-                    <div className="text-[#5f52ff] font-medium flex items-center justify-center sm:justify-start">
+                  <div className="p-4 sm:p-5 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
+                    <div className="text-[#5f52ff] font-medium text-sm sm:text-base flex items-center justify-center sm:justify-start">
                       View Variant
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

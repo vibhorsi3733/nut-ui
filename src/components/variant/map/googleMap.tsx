@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 
 // Google Map Variant Configuration
 export const googleMapCSS = {
-  container: "w-full h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] rounded-lg overflow-hidden shadow-lg",
-  map: "w-full h-full"
+  container: "w-full h-full rounded-lg overflow-hidden",
+  map: "w-full h-full min-h-[200px]"
 };
 
 export const googleMapData = {
@@ -11,8 +11,7 @@ export const googleMapData = {
   longitude: 77.2090,
   zoom: 13,
   markerTitle: "New Delhi",
-  markerDescription: "Capital of India",
-  apiKey: "YOUR_GOOGLE_MAPS_API_KEY" // User needs to replace with their API key
+  markerDescription: "Capital of India"
 };
 
 interface GoogleMapProps {
@@ -26,9 +25,10 @@ export const GoogleMapComponent: React.FC<GoogleMapProps> = ({ css, data }) => {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Use Google Maps embed URL
-    // Format: https://www.google.com/maps/embed/v1/place?key=API_KEY&q=latitude,longitude
-    const embedUrl = `https://www.google.com/maps/embed/v1/place?key=${data.apiKey}&q=${data.latitude},${data.longitude}&zoom=${data.zoom || 13}`;
+    // Use Google Maps embed URL without API key (public embed)
+    // Format: https://www.google.com/maps?q=latitude,longitude&output=embed
+    // Alternative: https://maps.google.com/maps?q=latitude,longitude&z=zoom&output=embed
+    const embedUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}&z=${data.zoom || 13}&output=embed`;
     
     const iframe = document.createElement('iframe');
     iframe.src = embedUrl;
@@ -50,7 +50,7 @@ export const GoogleMapComponent: React.FC<GoogleMapProps> = ({ css, data }) => {
         mapRef.current.innerHTML = '';
       }
     };
-  }, [data.latitude, data.longitude, data.zoom, data.apiKey, data.markerTitle]);
+  }, [data.latitude, data.longitude, data.zoom, data.markerTitle]);
 
   return (
     <div className={css.container}>

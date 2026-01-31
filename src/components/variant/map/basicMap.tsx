@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 
 // Basic Map Variant Configuration
 export const basicMapCSS = {
-  container: "w-full h-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] rounded-lg overflow-hidden shadow-lg",
-  map: "w-full h-full"
+  container: "w-full h-full rounded-lg overflow-hidden",
+  map: "w-full h-full min-h-[200px]"
 };
 
 export const basicMapData = {
