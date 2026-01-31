@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "add-component": "node scripts/add-component.js"
   },
   "dependencies": {
     "fs-extra": "^11.3.3",

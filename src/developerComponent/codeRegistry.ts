@@ -534,8 +534,38 @@ const PriceCard: React.FC<PriceCardProps> = ({ css, data }) => {
 export default PriceCard;`;
 
 // Component code mapping
+
+// Vibhor Component Code
+export const vibhorBaseCode = `import React from 'react';
+
+// Define TypeScript interfaces
+interface VibhorCSS {
+  container: string;
+  // Add your CSS properties here
+}
+
+interface VibhorData {
+  // Add your data properties here
+}
+
+interface VibhorProps {
+  css: VibhorCSS;
+  data: VibhorData;
+}
+
+const Vibhor: React.FC<VibhorProps> = ({ css, data }) => {
+  return (
+    <div className={css.container}>
+      {/* Your component implementation */}
+    </div>
+  );
+};
+
+export default Vibhor;
+`;
 export const componentCodeMap: Record<string, string> = {
   card: cardBaseCode,
+  vibhor: vibhorBaseCode,
   slider: sliderBaseCode,
   table: tableBaseCode,
   chip: chipBaseCode,

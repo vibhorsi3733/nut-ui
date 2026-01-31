@@ -247,7 +247,31 @@ function MyPage() {
 export default MyPage;`;
   }
 
-  // Default fallback
+  
+  // Vibhor component
+  if (componentId === 'vibhor') {
+    return `// Example: Using ${variant.name} in your application
+
+import { Vibhor } from '@/developerComponent/componentCollection';
+
+function MyPage() {
+  // Define CSS object with all styling classes
+  const vibhorCSS = ${JSON.stringify(displayCSS, null, 4)};
+
+  // Define data object
+  const vibhorData = ${JSON.stringify(displayData, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <Vibhor css={${vibhorCSS}} data={${vibhorData}} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+  }
+// Default fallback
   return `// Example: Using ${variant.name} in your application
 
 import { Component } from '@/developerComponent/componentCollection';

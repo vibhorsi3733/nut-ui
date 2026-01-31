@@ -32,6 +32,9 @@ export { default as ClipCard } from './clipCard/baseComponent';
 // Map Component
 export { default as Map } from './map/baseComponent';
 
+// Vibhor Component
+export { default as Vibhor } from './vibhor/baseComponent';
+
 // Export example components for reference
 export { default as CardExample } from './card/exampleComponent';
 export { default as SliderExample } from './slider/exampleComponent';
@@ -39,3 +42,4 @@ export { default as TableExample } from './table/exampleComponent';
 export { default as ChipExample } from './chip/exampleComponent';
 export { default as ClipCardExample } from './clipCard/exampleComponent';
 export { default as MapExample } from './map/exampleComponent';
+export { default as VibhorExample } from './vibhor/exampleComponent';
