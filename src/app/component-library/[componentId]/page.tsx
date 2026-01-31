@@ -148,50 +148,61 @@ const ComponentPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950">
       {/* Header */}
-      <header className="py-4 px-4 sm:px-6 lg:px-8 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#5f52ff] flex items-center justify-center">
-              <span className="text-white font-bold">N</span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">NUT UI</h1>
-          </Link>
-          <nav className="w-full sm:w-auto">
-            <ul className="flex flex-wrap justify-center gap-x-4 sm:gap-x-8 gap-y-2">
-              <li><Link href="/" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Home</Link></li>
-              <li><Link href="/component-library" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Component Library</Link></li>
-            </ul>
-          </nav>
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5f52ff] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#5f52ff]/20 group-hover:shadow-[#5f52ff]/30 transition-shadow">
+                <span className="text-white font-bold text-sm">N</span>
+              </div>
+              <span className="font-display font-bold text-base sm:text-lg text-gray-900 dark:text-white">NUT UI</span>
+            </Link>
+            <nav className="flex items-center space-x-6">
+              <Link href="/" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#5f52ff] group-hover:w-full transition-all duration-300"></span>
+              </Link>
+              <Link href="/component-library" className="text-sm font-medium text-gray-900 dark:text-white relative">
+                Components
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#5f52ff]"></span>
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
-        <div className="mb-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div className="mb-6">
           <Link 
             href="/component-library" 
-            className="inline-flex items-center text-[#5f52ff] hover:text-indigo-700 mb-4"
+            className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-4 w-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
+            <span className="font-mono text-xs mr-2 opacity-60">&lt;</span>
             Back to Component Library
           </Link>
         </div>
 
-        <div className="mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-            {component.name} Variants
+        <div className="mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5f52ff]/10 dark:bg-[#5f52ff]/20 border border-[#5f52ff]/20 mb-4">
+            <div className="w-2 h-2 rounded-full bg-[#5f52ff] animate-pulse"></div>
+            <span className="text-xs font-medium text-[#5f52ff] dark:text-[#818cf8]">{component.name}</span>
+          </div>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl mb-4 bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            {component.name}
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl">
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
             {component.description}
           </p>
         </div>
 
         {componentVariants.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
-            {componentVariants.map((variant) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {componentVariants.map((variant, index) => {
               const variantConfig = getVariantConfig(variant.id);
               if (!variantConfig) return null;
 
@@ -199,30 +210,48 @@ const ComponentPage = () => {
                 <Link
                   key={variant.id}
                   href={`/component-library/${componentId}/variants/${variant.id}`}
-                  className="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:border-[#5f52ff] cursor-pointer flex flex-col h-full"
+                  className="group relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-300 hover:border-[#5f52ff]/50 dark:hover:border-[#5f52ff]/50 hover:shadow-xl hover:shadow-[#5f52ff]/10 dark:hover:shadow-[#5f52ff]/20 hover:-translate-y-1"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className="p-4 sm:p-5 flex-grow flex flex-col">
-                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-2">
-                      {variant.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2">
-                      {variant.description}
-                    </p>
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#5f52ff]/0 via-[#5f52ff]/0 to-[#5f52ff]/0 group-hover:from-[#5f52ff]/5 group-hover:via-[#5f52ff]/0 group-hover:to-[#5f52ff]/5 transition-all duration-300 pointer-events-none"></div>
+                  
+                  {/* Top accent bar */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5f52ff] via-[#7c3aed] to-[#5f52ff] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  
+                  <div className="p-6 relative z-10">
+                    <div className="mb-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-[#5f52ff] transition-colors">
+                          {variant.name}
+                        </h3>
+                        <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
+                          #{index + 1}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                        {variant.description}
+                      </p>
+                    </div>
                     
-                    {/* Live Preview - Standardized sizing */}
-                    <div className={`bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center overflow-hidden flex-grow ${
+                    {/* Live Preview */}
+                    <div className={`relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden shadow-inner ${
                       componentId === 'slider' && variant.id === 'matchScoreCard' 
-                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]' 
+                        ? 'p-2 h-[240px]' 
                         : componentId === 'slider' 
-                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]'
+                        ? 'p-2 h-[240px]'
                         : componentId === 'table'
-                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px] overflow-x-auto'
+                        ? 'p-2 h-[240px] overflow-x-auto'
                         : componentId === 'map'
-                        ? 'p-2 sm:p-3 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]'
-                        : 'p-3 sm:p-4 h-[280px] sm:h-[300px] lg:h-[320px] xl:h-[300px] 2xl:h-[320px]'
+                        ? 'p-1 h-[240px]'
+                        : 'p-4 h-[240px]'
                     }`}>
-                      <div className="w-full h-full flex items-center justify-center max-w-full">
-                        <div className="w-full max-w-full scale-90 sm:scale-95 lg:scale-100 xl:scale-95 2xl:scale-100">
+                      {/* Preview label */}
+                      <div className="absolute top-2 right-2 px-2 py-0.5 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded text-xs font-mono text-gray-600 dark:text-gray-400 border border-gray-200/50 dark:border-gray-700/50">
+                        Preview
+                      </div>
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full max-w-full scale-90">
                       {componentId === 'slider' && variant.id === 'news' ? (
                         <div className="w-full h-full flex items-center justify-center">
                           <NewsSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
@@ -259,10 +288,11 @@ const ComponentPage = () => {
                     </div>
                   </div>
                   
-                  <div className="p-4 sm:p-5 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
-                    <div className="text-[#5f52ff] font-medium text-sm sm:text-base flex items-center justify-center sm:justify-start">
-                      View Variant
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-900/50 dark:to-transparent border-t border-gray-200 dark:border-gray-800 relative">
+                    <div className="text-sm font-semibold text-[#5f52ff] flex items-center">
+                      <span className="font-mono text-xs mr-2 opacity-60">&gt;</span>
+                      View variant
+                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
@@ -279,7 +309,7 @@ const ComponentPage = () => {
             </p>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

@@ -69,6 +69,7 @@ const VariantPage = () => {
   const [executedCSS, setExecutedCSS] = useState<any>(null);
   const [executedData, setExecutedData] = useState<any>(null);
   const initializedRef = useRef<string>('');
+  const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set(['css-props', 'data-props']));
 
   // Get component and variant configs dynamically
   const component = components.find(c => c.id === componentId);
@@ -901,52 +902,75 @@ export default MyPage;`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950">
       {/* Header */}
-      <header className="py-4 px-4 sm:px-6 lg:px-8 border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#5f52ff] flex items-center justify-center">
-              <span className="text-white font-bold">N</span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">NUT UI</h1>
-          </Link>
-          <nav className="w-full sm:w-auto">
-            <ul className="flex flex-wrap justify-center gap-x-4 sm:gap-x-8 gap-y-2">
-              <li><Link href="/" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Home</Link></li>
-              <li><Link href="/component-library" className="text-gray-600 hover:text-[#5f52ff] dark:text-gray-300 dark:hover:text-[#5f52ff]">Component Library</Link></li>
-            </ul>
-          </nav>
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5f52ff] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#5f52ff]/20 group-hover:shadow-[#5f52ff]/30 transition-shadow">
+                <span className="text-white font-bold text-sm">N</span>
+              </div>
+              <span className="font-bold text-gray-900 dark:text-white text-lg">NUT UI</span>
+            </Link>
+            <nav className="flex items-center space-x-6">
+              <Link href="/" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#5f52ff] group-hover:w-full transition-all duration-300"></span>
+              </Link>
+              <Link href="/component-library" className="text-sm font-medium text-gray-900 dark:text-white relative">
+                Components
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#5f52ff]"></span>
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
-        <div className="mb-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div className="mb-6">
           <Link 
             href={`/component-library/${componentId}`} 
-            className="inline-flex items-center text-[#5f52ff] hover:text-indigo-700 mb-4"
+            className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-4 w-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to {component.name} Variants
+            <span className="font-mono text-xs mr-2 opacity-60">&lt;</span>
+            Back to {component.name}
           </Link>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-8">
-          <div className="mb-6">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              {variant.name}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300">
-              {variant.description}
-            </p>
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5f52ff]/10 dark:bg-[#5f52ff]/20 border border-[#5f52ff]/20">
+              <div className="w-2 h-2 rounded-full bg-[#5f52ff] animate-pulse"></div>
+              <span className="text-xs font-medium text-[#5f52ff] dark:text-[#818cf8]">{component.name}</span>
+            </div>
+            <span className="text-xs font-mono text-gray-500 dark:text-gray-500">/</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-400">{variant.name}</span>
+            </div>
           </div>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-3 sm:mb-4 bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            {variant.name}
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
+            {variant.description}
+          </p>
+        </div>
 
-          {/* Live Preview Section */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Preview</h2>
-            <div className={`bg-gray-50 dark:bg-gray-700 rounded-lg ${
+        <div className="space-y-12">
+          {/* Preview Section */}
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Preview</h2>
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span className="text-xs font-mono font-medium text-green-700 dark:text-green-400">Live</span>
+              </div>
+            </div>
+            <div className={`relative bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-800 shadow-lg overflow-hidden ${
               componentId === 'slider' && (variantId === 'matchScoreCard' || variantId === 'matchScoreStack')
                 ? 'p-4 sm:p-6 md:p-8 min-h-[500px] sm:min-h-[550px] overflow-hidden'
                 : componentId === 'slider'
@@ -954,7 +978,7 @@ export default MyPage;`;
                 : componentId === 'table'
                 ? 'p-3 sm:p-4 md:p-6 overflow-x-auto'
                 : componentId === 'map'
-                ? 'p-3 sm:p-4 md:p-5 lg:p-6 min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[550px]'
+                ? 'p-2 sm:p-3 md:p-4 lg:p-5 min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[550px]'
                 : 'p-6 min-h-[200px] flex justify-center items-center'
             }`}>
               {componentId === 'slider' && variantId === 'news' ? (
@@ -990,29 +1014,67 @@ export default MyPage;`;
           </div>
 
           {/* Component Code Section */}
-          <div className="mb-8">
+          <div>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Component Code</h2>
+              <div className="flex items-center gap-3">
+                <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Component Code</h2>
+                <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                  TypeScript
+                </span>
+              </div>
               <button
                 onClick={() => handleCopyCode(componentCode, 'code')}
-                className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50"
+                className="px-4 py-2 bg-gradient-to-r from-[#5f52ff] to-[#7c3aed] text-white rounded-lg hover:from-[#6d5fff] hover:to-[#8b4efd] transition-all text-sm font-medium shadow-lg shadow-[#5f52ff]/20 hover:shadow-[#5f52ff]/30"
               >
-                {copiedCode ? 'Copied!' : 'Copy Code'}
+                {copiedCode ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Copied!
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copy Code
+                  </span>
+                )}
               </button>
             </div>
 
-            <div className="bg-gray-900 rounded-lg overflow-hidden">
-              <pre className="p-4 text-sm text-gray-200 overflow-x-auto max-h-96 overflow-y-auto">
-                <code>{componentCode}</code>
+            <div className="relative bg-gray-900 dark:bg-gray-950 rounded-xl border-2 border-gray-800 dark:border-gray-700 overflow-hidden shadow-2xl">
+              {/* Code header */}
+              <div className="flex items-center justify-between px-4 py-2 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <span className="ml-3 text-xs font-mono text-gray-400">component.tsx</span>
+                </div>
+                <div className="text-xs font-mono text-gray-500">React + TypeScript</div>
+              </div>
+              <pre className="p-6 text-sm text-gray-200 overflow-x-auto max-h-96 overflow-y-auto bg-gray-900 dark:bg-gray-950">
+                <code className="font-mono">{componentCode}</code>
               </pre>
             </div>
           </div>
 
           {/* How to Use Section - Only for Slider */}
           {componentId === 'slider' && (
-            <div className="mb-8 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">How to Use - Step by Step</h2>
-              <div className="space-y-4">
+            <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800 shadow-lg overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 dark:bg-blue-800/20 rounded-full blur-3xl"></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">How to Use - Step by Step</h2>
+                  <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                    Guide
+                  </span>
+                </div>
+                <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">1</div>
                   <div>
@@ -1067,47 +1129,86 @@ import 'swiper/css/navigation';`}</code>
                     </div>
                   </div>
                 </div>
+                </div>
               </div>
             </div>
           )}
 
           {/* Editable CSS and Data Section */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Edit Props</h2>
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Playground</h2>
+              <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-md bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800">
+                Interactive
+              </span>
+            </div>
             {parseError && (
-              <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm">
-                {parseError}
+              <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm flex items-start gap-2">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-mono">{parseError}</span>
               </div>
             )}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  CSS Object (JSON)
-                </label>
-                <textarea
-                  value={editableCSS}
-                  onChange={(e) => setEditableCSS(e.target.value)}
-                  className="w-full h-64 p-3 bg-gray-900 text-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#5f52ff] resize-none"
-                  spellCheck={false}
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <div className="relative">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    CSS Object (JSON)
+                  </label>
+                  <span className="text-xs font-mono text-gray-500 dark:text-gray-500">.css</span>
+                </div>
+                <div className="relative bg-gray-900 dark:bg-gray-950 rounded-xl border-2 border-gray-800 dark:border-gray-700 overflow-hidden shadow-lg">
+                  <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                    </div>
+                    <span className="text-xs font-mono text-gray-400">styles.json</span>
+                  </div>
+                  <textarea
+                    value={editableCSS}
+                    onChange={(e) => setEditableCSS(e.target.value)}
+                    className="w-full h-64 p-4 bg-gray-900 dark:bg-gray-950 text-gray-200 font-mono text-sm focus:outline-none resize-none"
+                    spellCheck={false}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Data Object (JSON)
-                </label>
-                <textarea
-                  value={editableData}
-                  onChange={(e) => setEditableData(e.target.value)}
-                  className="w-full h-64 p-3 bg-gray-900 text-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#5f52ff] resize-none"
-                  spellCheck={false}
-                />
+              <div className="relative">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Data Object (JSON)
+                  </label>
+                  <span className="text-xs font-mono text-gray-500 dark:text-gray-500">.data</span>
+                </div>
+                <div className="relative bg-gray-900 dark:bg-gray-950 rounded-xl border-2 border-gray-800 dark:border-gray-700 overflow-hidden shadow-lg">
+                  <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                    </div>
+                    <span className="text-xs font-mono text-gray-400">data.json</span>
+                  </div>
+                  <textarea
+                    value={editableData}
+                    onChange={(e) => setEditableData(e.target.value)}
+                    className="w-full h-64 p-4 bg-gray-900 dark:bg-gray-950 text-gray-200 font-mono text-sm focus:outline-none resize-none"
+                    spellCheck={false}
+                  />
+                </div>
               </div>
             </div>
             <div className="flex gap-3">
               <button
                 onClick={handleExecute}
-                className="px-6 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50 font-medium"
+                className="px-6 py-2.5 bg-gradient-to-r from-[#5f52ff] to-[#7c3aed] text-white rounded-lg hover:from-[#6d5fff] hover:to-[#8b4efd] transition-all font-semibold shadow-lg shadow-[#5f52ff]/20 hover:shadow-[#5f52ff]/30 flex items-center gap-2"
               >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 Execute
               </button>
               <button
@@ -1118,211 +1219,339 @@ import 'swiper/css/navigation';`}</code>
                   setExecutedData(null);
                   setParseError('');
                 }}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-4 py-2.5 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors font-medium flex items-center gap-2"
               >
-                Reset to Default
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Reset
               </button>
             </div>
           </div>
 
           {/* Usage Example Section */}
-          <div className="mb-8">
+          <div>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Usage Example</h2>
+              <div className="flex items-center gap-3">
+                <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Usage Example</h2>
+                <span className="px-2 py-0.5 text-xs font-mono font-medium rounded-md bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                  Copy & Paste
+                </span>
+              </div>
               <button
                 onClick={() => handleCopyCode(usageExample, 'usage')}
-                className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50"
+                className="px-4 py-2 bg-gradient-to-r from-[#5f52ff] to-[#7c3aed] text-white rounded-lg hover:from-[#6d5fff] hover:to-[#8b4efd] transition-all text-sm font-medium shadow-lg shadow-[#5f52ff]/20 hover:shadow-[#5f52ff]/30"
               >
-                {copiedUsage ? 'Copied!' : 'Copy Usage'}
+                {copiedUsage ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Copied!
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copy Usage
+                  </span>
+                )}
               </button>
             </div>
 
-            <div className="bg-gray-900 rounded-lg overflow-hidden">
-              <pre className="p-4 text-sm text-gray-200 overflow-x-auto max-h-96 overflow-y-auto">
-                <code>{usageExample}</code>
+            <div className="relative bg-gray-900 dark:bg-gray-950 rounded-xl border-2 border-gray-800 dark:border-gray-700 overflow-hidden shadow-2xl">
+              <div className="flex items-center justify-between px-4 py-2 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <span className="ml-3 text-xs font-mono text-gray-400">usage.example.tsx</span>
+                </div>
+                <div className="text-xs font-mono text-gray-500">React Component</div>
+              </div>
+              <pre className="p-6 text-sm text-gray-200 overflow-x-auto max-h-96 overflow-y-auto bg-gray-900 dark:bg-gray-950">
+                <code className="font-mono">{usageExample}</code>
               </pre>
             </div>
           </div>
 
           {/* Props Documentation Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-6">Props Documentation</h2>
+          <div>
+            <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-4 sm:mb-6">Props Documentation</h2>
             
-            <div className="space-y-6">
-              {/* CSS Props */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">CSS Props (css object)</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">Each property in the css object is a string containing Tailwind CSS classes. You can combine multiple classes to style each part of the card.</p>
-                <div className="space-y-3">
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">container</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Main card container styling. Controls the overall card appearance including background, border, shadow, and hover effects.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> bg-white, rounded-xl, shadow-lg, border, transition-all, hover:shadow-xl</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">Each class controls a specific visual property (background, border radius, shadow, etc.)</p>
+            <div className="space-y-4">
+              {/* CSS Props Accordion */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => {
+                    const newOpen = new Set(openAccordions);
+                    if (newOpen.has('css-props')) {
+                      newOpen.delete('css-props');
+                    } else {
+                      newOpen.add('css-props');
+                    }
+                    setOpenAccordions(newOpen);
+                  }}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">CSS Props (css object)</h3>
+                  <svg
+                    className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${
+                      openAccordions.has('css-props') ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openAccordions.has('css-props') && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">Each property in the css object is a string containing Tailwind CSS classes. You can combine multiple classes to style each part of the card.</p>
+                    <div className="space-y-3">
+                      {[
+                        { key: 'container', title: 'container', description: 'Main card container styling. Controls the overall card appearance including background, border, shadow, and hover effects.', examples: 'bg-white, rounded-xl, shadow-lg, border, transition-all, hover:shadow-xl', details: 'Each class controls a specific visual property (background, border radius, shadow, etc.)' },
+                        { key: 'header', title: 'header', description: 'Header section styling. Controls padding, positioning, and background for the area containing title and description.', examples: 'p-4, absolute, bottom-0, bg-gradient-to-t', details: 'Use "absolute" for overlay positioning, "p-4" for padding, "bg-gradient-to-t" for gradient backgrounds' },
+                        { key: 'title', title: 'title', description: 'Title text styling. Controls font size, weight, color, and spacing for the card title.', examples: 'text-white, text-xl, font-bold, mb-3, line-clamp-2', details: 'text-white = text color, text-xl = font size, font-bold = font weight, mb-3 = margin bottom, line-clamp-2 = max 2 lines' },
+                        { key: 'description', title: 'description', description: 'Description text styling. Controls font size, color, and spacing for the card description text.', examples: 'text-white/90, text-sm, mb-2', details: 'text-white/90 = white with 90% opacity, text-sm = small font size, mb-2 = margin bottom' },
+                        { key: 'content', title: 'content', description: 'Content area styling. Controls padding and styling for the main content section.', examples: 'p-4, hidden', details: 'Use "hidden" to hide this section completely, or use "p-4" for padding if you want to show content' },
+                        { key: 'footer', title: 'footer', description: 'Footer section styling. Controls layout, padding, and text styling for the footer area (e.g., date, share button).', examples: 'flex, items-center, justify-between, text-white/90, text-sm', details: 'flex = flexbox layout, items-center = vertical alignment, justify-between = space between items, text-white/90 = text color with opacity' },
+                        { key: 'image', title: 'image', description: 'Image styling. Controls width, height, object-fit, and other image display properties.', examples: 'w-full, h-64, object-cover', details: 'w-full = full width, h-64 = fixed height, object-cover = cover entire area while maintaining aspect ratio' }
+                      ].map((prop) => (
+                        <div key={prop.key} className="border-l-4 border-[#5f52ff] pl-4">
+                          <button
+                            onClick={() => {
+                              const newOpen = new Set(openAccordions);
+                              const propKey = `css-${prop.key}`;
+                              if (newOpen.has(propKey)) {
+                                newOpen.delete(propKey);
+                              } else {
+                                newOpen.add(propKey);
+                              }
+                              setOpenAccordions(newOpen);
+                            }}
+                            className="w-full flex items-center justify-between text-left"
+                          >
+                            <h4 className="font-semibold text-gray-900 dark:text-white">{prop.title}</h4>
+                            <svg
+                              className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                                openAccordions.has(`css-${prop.key}`) ? 'rotate-180' : ''
+                              }`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          {openAccordions.has(`css-${prop.key}`) && (
+                            <div className="mt-2">
+                              <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">{prop.description}</p>
+                              <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
+                                <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> {prop.examples}</p>
+                                <p className="text-gray-500 dark:text-gray-400 mt-1">{prop.details}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">header</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Header section styling. Controls padding, positioning, and background for the area containing title and description.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> p-4, absolute, bottom-0, bg-gradient-to-t</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">Use "absolute" for overlay positioning, "p-4" for padding, "bg-gradient-to-t" for gradient backgrounds</p>
-                    </div>
-                  </div>
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">title</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Title text styling. Controls font size, weight, color, and spacing for the card title.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> text-white, text-xl, font-bold, mb-3, line-clamp-2</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">text-white = text color, text-xl = font size, font-bold = font weight, mb-3 = margin bottom, line-clamp-2 = max 2 lines</p>
-                    </div>
-                  </div>
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">description</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Description text styling. Controls font size, color, and spacing for the card description text.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> text-white/90, text-sm, mb-2</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">text-white/90 = white with 90% opacity, text-sm = small font size, mb-2 = margin bottom</p>
-                    </div>
-                  </div>
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">content</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Content area styling. Controls padding and styling for the main content section.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> p-4, hidden</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">Use "hidden" to hide this section completely, or use "p-4" for padding if you want to show content</p>
-                    </div>
-                  </div>
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">footer</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Footer section styling. Controls layout, padding, and text styling for the footer area (e.g., date, share button).</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> flex, items-center, justify-between, text-white/90, text-sm</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">flex = flexbox layout, items-center = vertical alignment, justify-between = space between items, text-white/90 = text color with opacity</p>
-                    </div>
-                  </div>
-                  <div className="border-l-4 border-[#5f52ff] pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">image</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Image styling. Controls width, height, object-fit, and other image display properties.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300"><strong>Example classes:</strong> w-full, h-64, object-cover</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">w-full = full width, h-64 = fixed height, object-cover = cover entire area while maintaining aspect ratio</p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
 
-              {/* Data Props */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Data Props (data object)</h3>
-                <div className="space-y-3">
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">title</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm">Card title text. Displayed in the header section. Optional - card will work without it.</p>
-                  </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">description</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm">Card description text. Displayed below the title in the header section. Optional.</p>
-                  </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">content</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Main content of the card. Can be a string or React component (like forms, buttons, lists, etc.). Optional.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs mt-2">
-                      <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>String example:</strong> "This is the main content text"</p>
-                      <p className="text-gray-600 dark:text-gray-300"><strong>React component example:</strong> &lt;div&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">When using a React component, you can pass any valid React element or component as the content.</p>
-                    </div>
-                  </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">footer</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Footer content. Can be a string or React component (like date, share buttons, etc.). Optional.</p>
-                    
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs mb-2">
-                      <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>String example:</strong> "Footer text here"</p>
-                      <p className="text-gray-600 dark:text-gray-300"><strong>React component example:</strong> &lt;NewsCardFooter date="26 Jan, 2026" /&gt;</p>
-                    </div>
-                    
-                    {/* Nested Object: NewsCardFooter Component */}
-                    {variantId === 'news' && (
-                      <div className="mt-3 ml-4 pl-4 border-l-2 border-green-300 dark:border-green-600 bg-green-50/50 dark:bg-green-900/20 rounded-r p-3">
-                        <p className="text-gray-700 dark:text-gray-200 text-xs mb-3 font-semibold">📦 NewsCardFooter Component Props:</p>
-                        <p className="text-gray-600 dark:text-gray-300 text-xs mb-3">When footer is a NewsCardFooter component, it accepts these props:</p>
-                        <div className="space-y-3">
-                          <div className="bg-white dark:bg-gray-800 rounded p-2">
-                            <span className="font-semibold text-gray-900 dark:text-white text-xs">date (required):</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 ml-0">The date string to display (e.g., "26 Jan, 2026"). Shows with a calendar icon.</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Type:</strong> string</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Example:</strong> date="26 Jan, 2026"</p>
-                          </div>
-                          <div className="bg-white dark:bg-gray-800 rounded p-2">
-                            <span className="font-semibold text-gray-900 dark:text-white text-xs">shareUrl (optional):</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 ml-0">Custom URL to share on social media. If not provided, automatically uses the current page URL.</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Type:</strong> string (optional)</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Example:</strong> shareUrl="https://example.com/article"</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Default:</strong> Current page URL (window.location.href)</p>
-                          </div>
-                          <div className="bg-white dark:bg-gray-800 rounded p-2">
-                            <span className="font-semibold text-gray-900 dark:text-white text-xs">shareTitle (optional):</span>
-                            <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 ml-0">Title text to include when sharing on social media platforms. Used in Facebook, Twitter, and WhatsApp shares.</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Type:</strong> string (optional)</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Example:</strong> shareTitle="Article Title Here"</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Default:</strong> Empty string if not provided</p>
-                          </div>
+              {/* Data Props Accordion */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => {
+                    const newOpen = new Set(openAccordions);
+                    if (newOpen.has('data-props')) {
+                      newOpen.delete('data-props');
+                    } else {
+                      newOpen.add('data-props');
+                    }
+                    setOpenAccordions(newOpen);
+                  }}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Data Props (data object)</h3>
+                  <svg
+                    className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${
+                      openAccordions.has('data-props') ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openAccordions.has('data-props') && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="space-y-3">
+                      {[
+                        { key: 'title', title: 'title', description: 'Card title text. Displayed in the header section. Optional - card will work without it.' },
+                        { key: 'description', title: 'description', description: 'Card description text. Displayed below the title in the header section. Optional.' },
+                        { key: 'content', title: 'content', description: 'Main content of the card. Can be a string or React component (like forms, buttons, lists, etc.). Optional.', hasDetails: true },
+                        { key: 'footer', title: 'footer', description: 'Footer content. Can be a string or React component (like date, share buttons, etc.). Optional.', hasDetails: true },
+                        { key: 'imageUrl', title: 'imageUrl', description: 'URL of the image to display. If provided, image will be shown at the top of the card. Optional.', hasDetails: true },
+                        { key: 'imageAlt', title: 'imageAlt', description: 'Alternative text for the image. Used for accessibility (screen readers) and when image fails to load. Optional.', hasDetails: true }
+                      ].map((prop) => (
+                        <div key={prop.key} className="border-l-4 border-green-500 pl-4">
+                          <button
+                            onClick={() => {
+                              const newOpen = new Set(openAccordions);
+                              const propKey = `data-${prop.key}`;
+                              if (newOpen.has(propKey)) {
+                                newOpen.delete(propKey);
+                              } else {
+                                newOpen.add(propKey);
+                              }
+                              setOpenAccordions(newOpen);
+                            }}
+                            className="w-full flex items-center justify-between text-left"
+                          >
+                            <h4 className="font-semibold text-gray-900 dark:text-white">{prop.title}</h4>
+                            <svg
+                              className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                                openAccordions.has(`data-${prop.key}`) ? 'rotate-180' : ''
+                              }`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          {openAccordions.has(`data-${prop.key}`) && (
+                            <div className="mt-2">
+                              <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">{prop.description}</p>
+                              {prop.key === 'content' && (
+                                <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs mt-2">
+                                  <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>String example:</strong> "This is the main content text"</p>
+                                  <p className="text-gray-600 dark:text-gray-300"><strong>React component example:</strong> &lt;div&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;/div&gt;</p>
+                                  <p className="text-gray-500 dark:text-gray-400 mt-1">When using a React component, you can pass any valid React element or component as the content.</p>
+                                </div>
+                              )}
+                              {prop.key === 'footer' && (
+                                <>
+                                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs mb-2">
+                                    <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>String example:</strong> "Footer text here"</p>
+                                    <p className="text-gray-600 dark:text-gray-300"><strong>React component example:</strong> &lt;NewsCardFooter date="26 Jan, 2026" /&gt;</p>
+                                  </div>
+                                  {variantId === 'news' && componentId === 'card' && (
+                                    <div className="mt-3 ml-4 pl-4 border-l-2 border-green-300 dark:border-green-600 bg-green-50/50 dark:bg-green-900/20 rounded-r p-3">
+                                      <p className="text-gray-700 dark:text-gray-200 text-xs mb-3 font-semibold">📦 NewsCardFooter Component Props:</p>
+                                      <p className="text-gray-600 dark:text-gray-300 text-xs mb-3">When footer is a NewsCardFooter component, it accepts these props:</p>
+                                      <div className="space-y-3">
+                                        <div className="bg-white dark:bg-gray-800 rounded p-2">
+                                          <span className="font-semibold text-gray-900 dark:text-white text-xs">date (required):</span>
+                                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 ml-0">The date string to display (e.g., "26 Jan, 2026"). Shows with a calendar icon.</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Type:</strong> string</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Example:</strong> date="26 Jan, 2026"</p>
+                                        </div>
+                                        <div className="bg-white dark:bg-gray-800 rounded p-2">
+                                          <span className="font-semibold text-gray-900 dark:text-white text-xs">shareUrl (optional):</span>
+                                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 ml-0">Custom URL to share on social media. If not provided, automatically uses the current page URL.</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Type:</strong> string (optional)</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Example:</strong> shareUrl="https://example.com/article"</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Default:</strong> Current page URL (window.location.href)</p>
+                                        </div>
+                                        <div className="bg-white dark:bg-gray-800 rounded p-2">
+                                          <span className="font-semibold text-gray-900 dark:text-white text-xs">shareTitle (optional):</span>
+                                          <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 ml-0">Title text to include when sharing on social media platforms. Used in Facebook, Twitter, and WhatsApp shares.</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Type:</strong> string (optional)</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Example:</strong> shareTitle="Article Title Here"</p>
+                                          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 ml-0"><strong>Default:</strong> Empty string if not provided</p>
+                                        </div>
+                                      </div>
+                                      <div className="mt-3 bg-blue-50 dark:bg-blue-900/20 rounded p-2">
+                                        <p className="text-gray-700 dark:text-gray-200 text-xs font-semibold mb-1">💡 How NewsCardFooter Works:</p>
+                                        <ul className="text-gray-600 dark:text-gray-300 text-xs space-y-1 list-disc list-inside">
+                                          <li>Displays the date with a calendar icon</li>
+                                          <li>Shows a share button that opens a menu when clicked</li>
+                                          <li>Share menu includes: Facebook, Twitter/X, WhatsApp, Copy Link, and Close buttons</li>
+                                          <li>Clicking outside the menu or the close button closes the menu</li>
+                                          <li>Each share button opens the respective platform's share dialog</li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                              {prop.key === 'imageUrl' && (
+                                <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
+                                  <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Type:</strong> string (optional)</p>
+                                  <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Example:</strong> imageUrl="https://example.com/image.jpg"</p>
+                                  <p className="text-gray-500 dark:text-gray-400">Can be a relative path ("/images/card.jpg") or absolute URL ("https://..."). Image is displayed using the "image" CSS class from the css object.</p>
+                                </div>
+                              )}
+                              {prop.key === 'imageAlt' && (
+                                <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
+                                  <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Type:</strong> string (optional)</p>
+                                  <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Example:</strong> imageAlt="A beautiful sunset over mountains"</p>
+                                  <p className="text-gray-500 dark:text-gray-400"><strong>Default:</strong> "Card image" (if not provided)</p>
+                                  <p className="text-gray-500 dark:text-gray-400 mt-1">This text describes what the image shows. Important for accessibility and SEO.</p>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
-                        <div className="mt-3 bg-blue-50 dark:bg-blue-900/20 rounded p-2">
-                          <p className="text-gray-700 dark:text-gray-200 text-xs font-semibold mb-1">💡 How NewsCardFooter Works:</p>
-                          <ul className="text-gray-600 dark:text-gray-300 text-xs space-y-1 list-disc list-inside">
-                            <li>Displays the date with a calendar icon</li>
-                            <li>Shows a share button that opens a menu when clicked</li>
-                            <li>Share menu includes: Facebook, Twitter/X, WhatsApp, Copy Link, and Close buttons</li>
-                            <li>Clicking outside the menu or the close button closes the menu</li>
-                            <li>Each share button opens the respective platform's share dialog</li>
-                          </ul>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">imageUrl</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">URL of the image to display. If provided, image will be shown at the top of the card. Optional.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Type:</strong> string (optional)</p>
-                      <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Example:</strong> imageUrl="https://example.com/image.jpg"</p>
-                      <p className="text-gray-500 dark:text-gray-400">Can be a relative path ("/images/card.jpg") or absolute URL ("https://..."). Image is displayed using the "image" CSS class from the css object.</p>
+                      ))}
                     </div>
                   </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white">imageAlt</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Alternative text for the image. Used for accessibility (screen readers) and when image fails to load. Optional.</p>
-                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 text-xs">
-                      <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Type:</strong> string (optional)</p>
-                      <p className="text-gray-600 dark:text-gray-300 mb-1"><strong>Example:</strong> imageAlt="A beautiful sunset over mountains"</p>
-                      <p className="text-gray-500 dark:text-gray-400"><strong>Default:</strong> "Card image" (if not provided)</p>
-                      <p className="text-gray-500 dark:text-gray-400 mt-1">This text describes what the image shows. Important for accessibility and SEO.</p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
 
-              {/* How It Works */}
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">How It Works</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">
-                  The Card component accepts two main props:
-                </p>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 text-sm space-y-1">
-                  <li><strong>css:</strong> An object containing CSS classes for each part of the card (container, header, title, etc.)</li>
-                  <li><strong>data:</strong> An object containing all the content and information to display (title, description, image, etc.)</li>
-                </ul>
-                <p className="text-gray-600 dark:text-gray-300 text-sm mt-3">
-                  Nothing is hardcoded - you have complete control over styling and content by passing different objects.
-                </p>
+              {/* How It Works Accordion */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => {
+                    const newOpen = new Set(openAccordions);
+                    if (newOpen.has('how-it-works')) {
+                      newOpen.delete('how-it-works');
+                    } else {
+                      newOpen.add('how-it-works');
+                    }
+                    setOpenAccordions(newOpen);
+                  }}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">How It Works</h3>
+                  <svg
+                    className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${
+                      openAccordions.has('how-it-works') ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openAccordions.has('how-it-works') && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">
+                      The Card component accepts two main props:
+                    </p>
+                    <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 text-sm space-y-1">
+                      <li><strong>css:</strong> An object containing CSS classes for each part of the card (container, header, title, etc.)</li>
+                      <li><strong>data:</strong> An object containing all the content and information to display (title, description, image, etc.)</li>
+                    </ul>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mt-3">
+                      Nothing is hardcoded - you have complete control over styling and content by passing different objects.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
