@@ -362,6 +362,81 @@ const VariantPage = () => {
   const getBaseComponentCode = () => {
     switch (componentId) {
       case 'card':
+        // Price Card Variant has its own component implementation
+        if (variantId === 'priceCardVarient') {
+          return `import React from 'react';
+
+// Define TypeScript interfaces
+interface PriceCardCSS {
+  container: string;
+  header: string;
+  title: string;
+  description: string;
+  content: string;
+  footer: string;
+  image: string;
+}
+
+interface PriceCardData {
+  title?: string;
+  description?: string;
+  content?: string | React.ReactNode;
+  footer?: string | React.ReactNode;
+  imageUrl?: string;
+  imageAlt?: string;
+}
+
+interface PriceCardProps {
+  css: PriceCardCSS;
+  data: PriceCardData;
+}
+
+const PriceCard: React.FC<PriceCardProps> = ({ css, data }) => {
+  return (
+    <div className={css.container}>
+      {/* Image with Discount Banner */}
+      {data.imageUrl && (
+        <div className="relative">
+          <img
+            src={data.imageUrl}
+            alt={data.imageAlt || 'Product image'}
+            className={css.image}
+          />
+          {/* Discount Banner */}
+          <div className="absolute top-4 right-4 bg-pink-500 text-white font-semibold px-3 py-1 rounded text-sm sm:text-base">
+            Discount -30%
+          </div>
+        </div>
+      )}
+
+      {/* Title */}
+      {data.title && (
+        <div className={css.header}>
+          <h3 className={css.title}>{data.title}</h3>
+        </div>
+      )}
+
+      {/* Content (Price) */}
+      {data.content && (
+        <div className={css.content}>
+          {typeof data.content === 'string' ? <p>{data.content}</p> : data.content}
+        </div>
+      )}
+
+      {/* Footer (Buy Now Button) */}
+      {data.footer && (
+        <div className={css.footer}>
+          {typeof data.footer === 'string' ? <p>{data.footer}</p> : data.footer}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PriceCard;`;
+        }
+        
+        // All other card variants use the base Card component
         return `import React from 'react';
 
 // Define TypeScript interfaces
@@ -857,31 +932,34 @@ export default MyPage;
 // - breakpoints: Responsive breakpoints for different screen sizes`;
     }
     
-    // If footer is a React component, show how to import and use it
-    if (variantId === 'news' && componentId === 'card') {
-      return `// Example: Using ${variant.name} in your application
+    // Card variants
+    if (componentId === 'card') {
+      if (variantId === 'news') {
+        // News card uses NewsCardFooter component
+        const newsData = displayData as any;
+        return `// Example: Using ${variant.name} in your application
 
 import Card from '@/components/user_visible_code/Card';
 import NewsCardFooter from '@/components/variant/card/NewsCardFooter';
 
 function MyPage() {
   // Define CSS object
-  const cardCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const cardCSS = ${JSON.stringify(displayCSS, null, 4)};
 
-  // Define data object
+  // Define data object with NewsCardFooter component
   const cardData = {
-    title: "${variantConfig.data.title}",
-    description: "${variantConfig.data.description}",
-    content: "${variantConfig.data.content}",
+    title: ${JSON.stringify(newsData.title || '')},
+    description: ${JSON.stringify(newsData.description || '')},
+    content: ${JSON.stringify(newsData.content || '')},
     footer: (
       <NewsCardFooter 
         date="26 Jan, 2026"
-        shareTitle="${variantConfig.data.title}"
+        shareTitle=${JSON.stringify(newsData.title || '')}
         shareUrl="https://example.com/article"
       />
     ),
-    imageUrl: "${variantConfig.data.imageUrl}",
-    imageAlt: "${variantConfig.data.imageAlt}"
+    imageUrl: ${JSON.stringify(newsData.imageUrl || '')},
+    imageAlt: ${JSON.stringify(newsData.imageAlt || '')}
   };
 
   // Use the component
@@ -893,6 +971,51 @@ function MyPage() {
 }
 
 export default MyPage;`;
+      } else if (variantId === 'priceCardVarient') {
+        // Price card uses PriceCardComponent
+        return `// Example: Using ${variant.name} in your application
+
+import PriceCard from '@/components/variant/card/PriceCardComponent';
+
+function MyPage() {
+  // Define CSS object
+  const priceCardCSS = ${JSON.stringify(displayCSS, null, 4)};
+
+  // Define data object
+  const priceCardData = ${JSON.stringify(displayData, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <PriceCard css={priceCardCSS} data={priceCardData} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+      } else {
+        // Other card variants use base Card component
+        return `// Example: Using ${variant.name} in your application
+
+import Card from '@/components/user_visible_code/Card';
+
+function MyPage() {
+  // Define CSS object
+  const cardCSS = ${JSON.stringify(displayCSS, null, 4)};
+
+  // Define data object
+  const cardData = ${JSON.stringify(displayData, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <Card css={cardCSS} data={cardData} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+      }
     }
     
     if (componentId === 'table') {
@@ -988,21 +1111,22 @@ function MyPage() {
 export default MyPage;`;
     }
     
+    // Default fallback (should not reach here for known components)
     return `// Example: Using ${variant.name} in your application
 
-import Card from '@/components/user_visible_code/Card';
+import Component from '@/components/user_visible_code/Component';
 
 function MyPage() {
   // Define CSS object
-  const cardCSS = ${JSON.stringify(displayCSS, null, 4)};
+  const componentCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Define data object
-  const cardData = ${JSON.stringify(displayData, null, 4)};
+  const componentData = ${JSON.stringify(displayData, null, 4)};
 
   // Use the component
   return (
     <div className="container mx-auto p-4">
-      <Card css={cardCSS} data={cardData} />
+      <Component css={componentCSS} data={componentData} />
     </div>
   );
 }
