@@ -12,8 +12,6 @@ import PriceCardComponent from '@/components/variant/card/PriceCardComponent';
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
 import { 
-  basicCardCSS, 
-  basicCardData,
   imageCardCSS,
   imageCardData,
   newsCardCSS,

@@ -7,7 +7,7 @@ import Table from '@/components/Table';
 import Chip from '@/components/Chip';
 import Map from '@/components/Map';
 import { components } from '@/config/components';
-import { basicCardCSS, basicCardData } from '@/components/variant/card';
+import { imageCardCSS, imageCardData } from '@/components/variant/card';
 import { newsSliderCSS, newsSliderData, NewsSliderComponent } from '@/components/variant/slider';
 import { scoreBoardCSS, scoreBoardData } from '@/components/variant/table';
 import { popularSearchesCSS, popularSearchesData, PopularSearchesComponent } from '@/components/variant/chip';
@@ -19,7 +19,7 @@ const ComponentLibraryPage = () => {
   const getComponentPreview = (componentId: string) => {
     switch (componentId) {
       case 'card':
-        return <Card css={basicCardCSS} data={basicCardData} />;
+        return <Card css={imageCardCSS} data={imageCardData} />;
       case 'slider':
         return <NewsSliderComponent css={newsSliderCSS} data={newsSliderData} />;
       case 'table':
