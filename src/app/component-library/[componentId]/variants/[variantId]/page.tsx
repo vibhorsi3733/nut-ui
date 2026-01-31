@@ -63,7 +63,8 @@ const VariantPage = () => {
   const params = useParams();
   const componentId = params.componentId as string;
   const variantId = params.variantId as string;
-  const [copied, setCopied] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedUsage, setCopiedUsage] = useState(false);
 
   // Get component and variant configs dynamically
   const component = components.find(c => c.id === componentId);
@@ -819,10 +820,15 @@ export default MyPage;`;
 
   const usageExample = getUsageExample();
 
-  const handleCopyCode = (code: string) => {
+  const handleCopyCode = (code: string, type: 'code' | 'usage') => {
     navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (type === 'code') {
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    } else {
+      setCopiedUsage(true);
+      setTimeout(() => setCopiedUsage(false), 2000);
+    }
   };
 
   return (
@@ -917,10 +923,10 @@ export default MyPage;`;
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Component Code</h2>
               <button
-                onClick={() => handleCopyCode(componentCode)}
+                onClick={() => handleCopyCode(componentCode, 'code')}
                 className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50"
               >
-                {copied ? 'Copied!' : 'Copy Code'}
+                {copiedCode ? 'Copied!' : 'Copy Code'}
               </button>
             </div>
 
@@ -999,10 +1005,10 @@ import 'swiper/css/navigation';`}</code>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Usage Example</h2>
               <button
-                onClick={() => handleCopyCode(usageExample)}
+                onClick={() => handleCopyCode(usageExample, 'usage')}
                 className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50"
               >
-                {copied ? 'Copied!' : 'Copy Usage'}
+                {copiedUsage ? 'Copied!' : 'Copy Usage'}
               </button>
             </div>
 
