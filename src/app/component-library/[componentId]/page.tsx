@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import Sidebar from '@/components/Sidebar';
 import Card from '@/components/Card';
 import Table from '@/components/Table';
 import Chip from '@/components/Chip';
@@ -60,6 +61,7 @@ import {
 const ComponentPage = () => {
   const params = useParams();
   const componentId = params.componentId as string;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Get component config dynamically
   const component = components.find(c => c.id === componentId);
@@ -153,12 +155,34 @@ const ComponentPage = () => {
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5f52ff] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#5f52ff]/20 group-hover:shadow-[#5f52ff]/30 transition-shadow">
-                <span className="text-white font-bold text-sm">N</span>
-              </div>
-              <span className="font-display font-bold text-base sm:text-lg text-gray-900 dark:text-white">NUT UI</span>
-            </Link>
+            <div className="flex items-center gap-4">
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="Toggle sidebar"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-600 dark:text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                  />
+                </svg>
+              </button>
+              <Link href="/" className="flex items-center space-x-2 group">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5f52ff] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#5f52ff]/20 group-hover:shadow-[#5f52ff]/30 transition-shadow">
+                  <span className="text-white font-bold text-sm">N</span>
+                </div>
+                <span className="font-display font-bold text-base sm:text-lg text-gray-900 dark:text-white">NUT UI</span>
+              </Link>
+            </div>
             <nav className="flex items-center space-x-6">
               <Link href="/" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
                 Home
@@ -173,7 +197,11 @@ const ComponentPage = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+      {/* Sidebar */}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <main className="lg:pl-64">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="mb-6">
           <Link 
             href="/component-library" 
@@ -309,6 +337,7 @@ const ComponentPage = () => {
             </p>
           </div>
         )}
+        </div>
       </main>
     </div>
   );

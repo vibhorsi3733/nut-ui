@@ -126,9 +126,25 @@ export default MyComponent;`;
               <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Code</h2>
               <button
                 onClick={handleCopyCode}
-                className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50"
+                className="px-3 py-2 sm:px-4 sm:py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50 text-xs sm:text-sm"
               >
-                {copied ? 'Copied!' : 'Copy Code'}
+                <span className="flex items-center gap-1 sm:gap-2">
+                  {copied ? (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="hidden sm:inline">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <span className="hidden sm:inline">Copy Code</span>
+                    </>
+                  )}
+                </span>
               </button>
             </div>
 
