@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
 import Card from '@/components/Card';
 import Table from '@/components/Table';
 import Chip from '@/components/Chip';
@@ -62,7 +61,6 @@ const VariantPage = () => {
   const params = useParams();
   const componentId = params.componentId as string;
   const variantId = params.variantId as string;
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedUsage, setCopiedUsage] = useState(false);
   const [editableCSS, setEditableCSS] = useState<string>('');
@@ -76,6 +74,88 @@ const VariantPage = () => {
   // Get component and variant configs dynamically
   const component = components.find(c => c.id === componentId);
   const variant = variants.find(v => v.id === variantId && v.componentId === componentId);
+
+  if (!component || !variant) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variant Not Found</h1>
+          <Link 
+            href={`/component-library/${componentId}`} 
+            className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Back to {component?.name || 'Component'} Variants
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Dynamic variant CSS and data mapping
+  const getVariantConfig = (): { css: any; data: any } | null => {
+    switch (componentId) {
+      case 'card':
+        switch (variantId) {
+          case 'image':
+            return { css: imageCardCSS, data: imageCardData };
+          case 'news':
+            return { css: newsCardCSS, data: newsCardData };
+          case 'cardLowerHeading':
+            return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
+          case 'dataCard':
+            return { css: dataCardCSS, data: dataCardData };
+          case 'priceCardVarient':
+            return { css: priceCardVarientCSS, data: priceCardVarientData };
+          default:
+            return null;
+        }
+      case 'slider':
+        switch (variantId) {
+          case 'news':
+            return { css: newsSliderCSS, data: newsSliderData };
+          case 'matchScoreCard':
+            return { css: matchScoreCardSliderCSS, data: matchScoreCardSliderData };
+          case 'matchScoreStack':
+            return { css: matchScoreStackSliderCSS, data: matchScoreStackSliderData };
+          default:
+            return null;
+        }
+      case 'table':
+        switch (variantId) {
+          case 'scoreBoard':
+            return { css: scoreBoardCSS, data: scoreBoardData };
+          default:
+            return null;
+        }
+      case 'chip':
+        switch (variantId) {
+          case 'popularSearches':
+            return { css: popularSearchesCSS, data: popularSearchesData };
+          default:
+            return null;
+        }
+      case 'clipCard':
+        switch (variantId) {
+          case 'videoCard':
+            return { css: videoCardCSS, data: videoCardData };
+          default:
+            return null;
+        }
+      case 'map':
+        switch (variantId) {
+          case 'basicMap':
+            return { css: basicMapCSS, data: basicMapData };
+          case 'googleMap':
+            return { css: googleMapCSS, data: googleMapData };
+          default:
+            return null;
+        }
+      default:
+        return null;
+    }
+  };
+
+  const variantConfig = getVariantConfig();
 
   // Get CSS props based on component type
   const getCSSProps = () => {
@@ -198,88 +278,6 @@ const VariantPage = () => {
         return [];
     }
   };
-
-  if (!component || !variant) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variant Not Found</h1>
-          <Link 
-            href={`/component-library/${componentId}`} 
-            className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            Back to {component?.name || 'Component'} Variants
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Dynamic variant CSS and data mapping
-  const getVariantConfig = (): { css: any; data: any } | null => {
-    switch (componentId) {
-      case 'card':
-        switch (variantId) {
-          case 'image':
-            return { css: imageCardCSS, data: imageCardData };
-          case 'news':
-            return { css: newsCardCSS, data: newsCardData };
-          case 'cardLowerHeading':
-            return { css: cardLowerHeadingCSS, data: cardLowerHeadingData };
-          case 'dataCard':
-            return { css: dataCardCSS, data: dataCardData };
-          case 'priceCardVarient':
-            return { css: priceCardVarientCSS, data: priceCardVarientData };
-          default:
-            return null;
-        }
-      case 'slider':
-        switch (variantId) {
-          case 'news':
-            return { css: newsSliderCSS, data: newsSliderData };
-          case 'matchScoreCard':
-            return { css: matchScoreCardSliderCSS, data: matchScoreCardSliderData };
-          case 'matchScoreStack':
-            return { css: matchScoreStackSliderCSS, data: matchScoreStackSliderData };
-          default:
-            return null;
-        }
-      case 'table':
-        switch (variantId) {
-          case 'scoreBoard':
-            return { css: scoreBoardCSS, data: scoreBoardData };
-          default:
-            return null;
-        }
-      case 'chip':
-        switch (variantId) {
-          case 'popularSearches':
-            return { css: popularSearchesCSS, data: popularSearchesData };
-          default:
-            return null;
-        }
-      case 'clipCard':
-        switch (variantId) {
-          case 'videoCard':
-            return { css: videoCardCSS, data: videoCardData };
-          default:
-            return null;
-        }
-      case 'map':
-        switch (variantId) {
-          case 'basicMap':
-            return { css: basicMapCSS, data: basicMapData };
-          case 'googleMap':
-            return { css: googleMapCSS, data: googleMapData };
-          default:
-            return null;
-        }
-      default:
-        return null;
-    }
-  };
-
-  const variantConfig = getVariantConfig();
 
   if (!variantConfig) {
     return (
@@ -1031,34 +1029,12 @@ export default MyPage;`;
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-4">
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                aria-label="Toggle sidebar"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600 dark:text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                  />
-                </svg>
-              </button>
-              <Link href="/" className="flex items-center space-x-2 group">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5f52ff] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#5f52ff]/20 group-hover:shadow-[#5f52ff]/30 transition-shadow">
-                  <span className="text-white font-bold text-sm">N</span>
-                </div>
-                <span className="font-display font-bold text-base sm:text-lg text-gray-900 dark:text-white">NUT UI</span>
-              </Link>
-            </div>
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5f52ff] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-[#5f52ff]/20 group-hover:shadow-[#5f52ff]/30 transition-shadow">
+                <span className="text-white font-bold text-sm">N</span>
+              </div>
+              <span className="font-bold text-gray-900 dark:text-white text-lg">NUT UI</span>
+            </Link>
             <nav className="flex items-center space-x-6">
               <Link href="/" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
                 Home
@@ -1073,11 +1049,7 @@ export default MyPage;`;
         </div>
       </header>
 
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      <main className="lg:pl-64">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="mb-6">
           <Link 
             href={`/component-library/${componentId}`} 
@@ -1490,7 +1462,7 @@ import 'swiper/css/navigation';`}</code>
                     <div className="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
                       <p className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
                         <span className="text-blue-500 mt-0.5">💡</span>
-                        <span>Each property in the <code className="font-mono text-xs bg-white dark:bg-gray-800 px-1.5 py-0.5 rounded">css</code> object is a string containing Tailwind CSS classes. You can combine multiple classes to style each part of the {component.name.toLowerCase()} component. Only the props listed below are used by this component.</span>
+                        <span>Each property in the <code className="font-mono text-xs bg-white dark:bg-gray-800 px-1.5 py-0.5 rounded">css</code> object is a string containing Tailwind CSS classes. You can combine multiple classes to style each part of the component.</span>
                       </p>
                     </div>
                     <div className="space-y-2 sm:space-y-3">
@@ -1651,6 +1623,190 @@ import 'swiper/css/navigation';`}</code>
                           {openAccordions.has(`data-${prop.key}`) && (
                             <div className="px-4 pb-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-800/30 animate-in slide-in-from-top-2 duration-200">
                               <p className="text-sm text-gray-700 dark:text-gray-300 mt-3 mb-3">{prop.description}</p>
+                              {prop.key === 'content' && (
+                                <div className="mt-3 space-y-2">
+                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
+                                      <div className="flex gap-1">
+                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                                      </div>
+                                      <span className="text-xs font-mono text-gray-400">examples.ts</span>
+                                    </div>
+                                    <div className="p-3 space-y-2">
+                                      <div>
+                                        <p className="text-xs text-gray-400 mb-1">String:</p>
+                                        <code className="text-xs font-mono text-gray-300">
+                                          <span className="text-purple-400">content</span>
+                                          <span className="text-gray-500">: </span>
+                                          <span className="text-green-400">"This is the main content text"</span>
+                                        </code>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-gray-400 mb-1">React Component:</p>
+                                        <code className="text-xs font-mono text-gray-300">
+                                          <span className="text-purple-400">content</span>
+                                          <span className="text-gray-500">: </span>
+                                          <span className="text-blue-400">&lt;</span>
+                                          <span className="text-yellow-400">div</span>
+                                          <span className="text-blue-400">&gt;</span>
+                                          <span className="text-gray-500">...</span>
+                                          <span className="text-blue-400">&lt;/</span>
+                                          <span className="text-yellow-400">div</span>
+                                          <span className="text-blue-400">&gt;</span>
+                                        </code>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">When using a React component, you can pass any valid React element or component as the content.</p>
+                                </div>
+                              )}
+                              {prop.key === 'footer' && (
+                                <div className="mt-3 space-y-2">
+                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
+                                      <div className="flex gap-1">
+                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                                      </div>
+                                      <span className="text-xs font-mono text-gray-400">examples.ts</span>
+                                    </div>
+                                    <div className="p-3 space-y-2">
+                                      <div>
+                                        <p className="text-xs text-gray-400 mb-1">String:</p>
+                                        <code className="text-xs font-mono text-gray-300">
+                                          <span className="text-purple-400">footer</span>
+                                          <span className="text-gray-500">: </span>
+                                          <span className="text-green-400">"Footer text here"</span>
+                                        </code>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-gray-400 mb-1">React Component:</p>
+                                        <code className="text-xs font-mono text-gray-300">
+                                          <span className="text-purple-400">footer</span>
+                                          <span className="text-gray-500">: </span>
+                                          <span className="text-blue-400">&lt;</span>
+                                          <span className="text-yellow-400">NewsCardFooter</span>
+                                          <span className="text-gray-500"> </span>
+                                          <span className="text-purple-400">date</span>
+                                          <span className="text-gray-500">=</span>
+                                          <span className="text-green-400">"26 Jan, 2026"</span>
+                                          <span className="text-blue-400"> /&gt;</span>
+                                        </code>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {variantId === 'news' && componentId === 'card' && (
+                                    <div className="mt-4 p-4 rounded-lg border-2 border-emerald-500/30 dark:border-emerald-500/20 bg-gradient-to-br from-emerald-50/50 to-green-50/50 dark:from-emerald-900/20 dark:to-green-900/20">
+                                      <div className="flex items-center gap-2 mb-3">
+                                        <span className="text-lg">📦</span>
+                                        <h4 className="font-display text-sm font-bold text-gray-900 dark:text-white">NewsCardFooter Component Props</h4>
+                                      </div>
+                                      <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">When footer is a NewsCardFooter component, it accepts these props:</p>
+                                      <div className="space-y-3">
+                                        {[
+                                          { name: 'date', required: true, type: 'string', description: 'The date string to display (e.g., "26 Jan, 2026"). Shows with a calendar icon.', example: 'date="26 Jan, 2026"' },
+                                          { name: 'shareUrl', required: false, type: 'string | undefined', description: 'Custom URL to share on social media. If not provided, automatically uses the current page URL.', example: 'shareUrl="https://example.com/article"', default: 'Current page URL (window.location.href)' },
+                                          { name: 'shareTitle', required: false, type: 'string | undefined', description: 'Title text to include when sharing on social media platforms. Used in Facebook, Twitter, and WhatsApp shares.', example: 'shareTitle="Article Title Here"', default: 'Empty string if not provided' }
+                                        ].map((footerProp) => (
+                                          <div key={footerProp.name} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3">
+                                            <div className="flex items-center gap-2 mb-2">
+                                              <code className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/20">
+                                                {footerProp.name}
+                                              </code>
+                                              {footerProp.required && (
+                                                <span className="px-1.5 py-0.5 text-xs font-semibold rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
+                                                  required
+                                                </span>
+                                              )}
+                                              {!footerProp.required && (
+                                                <span className="px-1.5 py-0.5 text-xs font-semibold rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
+                                                  optional
+                                                </span>
+                                              )}
+                                            </div>
+                                            <p className="text-xs text-gray-600 dark:text-gray-300 mb-2">{footerProp.description}</p>
+                                            <div className="bg-gray-900 dark:bg-gray-950 rounded border border-gray-800 dark:border-gray-700 p-2 mt-2">
+                                              <code className="text-xs font-mono text-gray-300">
+                                                <span className="text-purple-400">{footerProp.name}</span>
+                                                <span className="text-gray-500">: </span>
+                                                <span className="text-green-400">"{footerProp.example.split('=')[1]?.replace(/"/g, '') || 'value'}"</span>
+                                              </code>
+                                            </div>
+                                            {footerProp.default && (
+                                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                                <strong>Default:</strong> <code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">{footerProp.default}</code>
+                                              </p>
+                                            )}
+                                          </div>
+                                        ))}
+                                      </div>
+                                      <div className="mt-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                                        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center gap-2">
+                                          <span>💡</span>
+                                          <span>How NewsCardFooter Works:</span>
+                                        </p>
+                                        <ul className="text-xs text-gray-600 dark:text-gray-300 space-y-1 list-disc list-inside ml-4">
+                                          <li>Displays the date with a calendar icon</li>
+                                          <li>Shows a share button that opens a menu when clicked</li>
+                                          <li>Share menu includes: Facebook, Twitter/X, WhatsApp, Copy Link, and Close buttons</li>
+                                          <li>Clicking outside the menu or the close button closes the menu</li>
+                                          <li>Each share button opens the respective platform's share dialog</li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              {prop.key === 'imageUrl' && (
+                                <div className="mt-3">
+                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
+                                      <div className="flex gap-1">
+                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                                      </div>
+                                      <span className="text-xs font-mono text-gray-400">example.ts</span>
+                                    </div>
+                                    <div className="p-3">
+                                      <code className="text-xs font-mono text-gray-300">
+                                        <span className="text-purple-400">imageUrl</span>
+                                        <span className="text-gray-500">: </span>
+                                        <span className="text-green-400">"https://example.com/image.jpg"</span>
+                                      </code>
+                                    </div>
+                                  </div>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Can be a relative path (<code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">"/images/card.jpg"</code>) or absolute URL. Image is displayed using the <code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">image</code> CSS class.</p>
+                                </div>
+                              )}
+                              {prop.key === 'imageAlt' && (
+                                <div className="mt-3">
+                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
+                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
+                                      <div className="flex gap-1">
+                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                                      </div>
+                                      <span className="text-xs font-mono text-gray-400">example.ts</span>
+                                    </div>
+                                    <div className="p-3">
+                                      <code className="text-xs font-mono text-gray-300">
+                                        <span className="text-purple-400">imageAlt</span>
+                                        <span className="text-gray-500">: </span>
+                                        <span className="text-green-400">"A beautiful sunset over mountains"</span>
+                                      </code>
+                                    </div>
+                                  </div>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                    <strong>Default:</strong> <code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">"Card image"</code> (if not provided). 
+                                    This text describes what the image shows. Important for accessibility and SEO.
+                                  </p>
+                                </div>
+                              )}
                               {prop.key === 'slides' && componentId === 'slider' && (
                                 <div className="mt-3">
                                   {variantId === 'news' ? (
@@ -1865,190 +2021,6 @@ import 'swiper/css/navigation';`}</code>
                                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Each chip object has label (string, required) and optional icon (ReactNode).</p>
                                 </div>
                               )}
-                              {prop.key === 'content' && (
-                                <div className="mt-3 space-y-2">
-                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
-                                      <div className="flex gap-1">
-                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                      </div>
-                                      <span className="text-xs font-mono text-gray-400">examples.ts</span>
-                                    </div>
-                                    <div className="p-3 space-y-2">
-                                      <div>
-                                        <p className="text-xs text-gray-400 mb-1">String:</p>
-                                        <code className="text-xs font-mono text-gray-300">
-                                          <span className="text-purple-400">content</span>
-                                          <span className="text-gray-500">: </span>
-                                          <span className="text-green-400">"This is the main content text"</span>
-                                        </code>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs text-gray-400 mb-1">React Component:</p>
-                                        <code className="text-xs font-mono text-gray-300">
-                                          <span className="text-purple-400">content</span>
-                                          <span className="text-gray-500">: </span>
-                                          <span className="text-blue-400">&lt;</span>
-                                          <span className="text-yellow-400">div</span>
-                                          <span className="text-blue-400">&gt;</span>
-                                          <span className="text-gray-500">...</span>
-                                          <span className="text-blue-400">&lt;/</span>
-                                          <span className="text-yellow-400">div</span>
-                                          <span className="text-blue-400">&gt;</span>
-                                        </code>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">When using a React component, you can pass any valid React element or component as the content.</p>
-                                </div>
-                              )}
-                              {prop.key === 'footer' && (
-                                <div className="mt-3 space-y-2">
-                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
-                                      <div className="flex gap-1">
-                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                      </div>
-                                      <span className="text-xs font-mono text-gray-400">examples.ts</span>
-                                    </div>
-                                    <div className="p-3 space-y-2">
-                                      <div>
-                                        <p className="text-xs text-gray-400 mb-1">String:</p>
-                                        <code className="text-xs font-mono text-gray-300">
-                                          <span className="text-purple-400">footer</span>
-                                          <span className="text-gray-500">: </span>
-                                          <span className="text-green-400">"Footer text here"</span>
-                                        </code>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs text-gray-400 mb-1">React Component:</p>
-                                        <code className="text-xs font-mono text-gray-300">
-                                          <span className="text-purple-400">footer</span>
-                                          <span className="text-gray-500">: </span>
-                                          <span className="text-blue-400">&lt;</span>
-                                          <span className="text-yellow-400">NewsCardFooter</span>
-                                          <span className="text-gray-500"> </span>
-                                          <span className="text-purple-400">date</span>
-                                          <span className="text-gray-500">=</span>
-                                          <span className="text-green-400">"26 Jan, 2026"</span>
-                                          <span className="text-blue-400"> /&gt;</span>
-                                        </code>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  {variantId === 'news' && componentId === 'card' && (
-                                    <div className="mt-4 p-4 rounded-lg border-2 border-emerald-500/30 dark:border-emerald-500/20 bg-gradient-to-br from-emerald-50/50 to-green-50/50 dark:from-emerald-900/20 dark:to-green-900/20">
-                                      <div className="flex items-center gap-2 mb-3">
-                                        <span className="text-lg">📦</span>
-                                        <h4 className="font-display text-sm font-bold text-gray-900 dark:text-white">NewsCardFooter Component Props</h4>
-                                      </div>
-                                      <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">When footer is a NewsCardFooter component, it accepts these props:</p>
-                                      <div className="space-y-3">
-                                        {[
-                                          { name: 'date', required: true, type: 'string', description: 'The date string to display (e.g., "26 Jan, 2026"). Shows with a calendar icon.', example: 'date="26 Jan, 2026"' },
-                                          { name: 'shareUrl', required: false, type: 'string | undefined', description: 'Custom URL to share on social media. If not provided, automatically uses the current page URL.', example: 'shareUrl="https://example.com/article"', default: 'Current page URL (window.location.href)' },
-                                          { name: 'shareTitle', required: false, type: 'string | undefined', description: 'Title text to include when sharing on social media platforms. Used in Facebook, Twitter, and WhatsApp shares.', example: 'shareTitle="Article Title Here"', default: 'Empty string if not provided' }
-                                        ].map((footerProp) => (
-                                          <div key={footerProp.name} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3">
-                                            <div className="flex items-center gap-2 mb-2">
-                                              <code className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/20">
-                                                {footerProp.name}
-                                              </code>
-                                              {footerProp.required && (
-                                                <span className="px-1.5 py-0.5 text-xs font-semibold rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
-                                                  required
-                                                </span>
-                                              )}
-                                              {!footerProp.required && (
-                                                <span className="px-1.5 py-0.5 text-xs font-semibold rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
-                                                  optional
-                                                </span>
-                                              )}
-                                            </div>
-                                            <p className="text-xs text-gray-600 dark:text-gray-300 mb-2">{footerProp.description}</p>
-                                            <div className="bg-gray-900 dark:bg-gray-950 rounded border border-gray-800 dark:border-gray-700 p-2 mt-2">
-                                              <code className="text-xs font-mono text-gray-300">
-                                                <span className="text-purple-400">{footerProp.name}</span>
-                                                <span className="text-gray-500">: </span>
-                                                <span className="text-green-400">"{footerProp.example.split('=')[1]?.replace(/"/g, '') || 'value'}"</span>
-                                              </code>
-                                            </div>
-                                            {footerProp.default && (
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                                <strong>Default:</strong> <code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">{footerProp.default}</code>
-                                              </p>
-                                            )}
-                                          </div>
-                                        ))}
-                                      </div>
-                                      <div className="mt-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                                        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center gap-2">
-                                          <span>💡</span>
-                                          <span>How NewsCardFooter Works:</span>
-                                        </p>
-                                        <ul className="text-xs text-gray-600 dark:text-gray-300 space-y-1 list-disc list-inside ml-4">
-                                          <li>Displays the date with a calendar icon</li>
-                                          <li>Shows a share button that opens a menu when clicked</li>
-                                          <li>Share menu includes: Facebook, Twitter/X, WhatsApp, Copy Link, and Close buttons</li>
-                                          <li>Clicking outside the menu or the close button closes the menu</li>
-                                          <li>Each share button opens the respective platform's share dialog</li>
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                              {prop.key === 'imageUrl' && (
-                                <div className="mt-3">
-                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
-                                      <div className="flex gap-1">
-                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                      </div>
-                                      <span className="text-xs font-mono text-gray-400">example.ts</span>
-                                    </div>
-                                    <div className="p-3">
-                                      <code className="text-xs font-mono text-gray-300">
-                                        <span className="text-purple-400">imageUrl</span>
-                                        <span className="text-gray-500">: </span>
-                                        <span className="text-green-400">"https://example.com/image.jpg"</span>
-                                      </code>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Can be a relative path (<code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">"/images/card.jpg"</code>) or absolute URL. Image is displayed using the <code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">image</code> CSS class.</p>
-                                </div>
-                              )}
-                              {prop.key === 'imageAlt' && (
-                                <div className="mt-3">
-                                  <div className="bg-gray-900 dark:bg-gray-950 rounded-lg border border-gray-800 dark:border-gray-700 overflow-hidden">
-                                    <div className="px-3 py-1.5 bg-gray-800 dark:bg-gray-900 border-b border-gray-700 dark:border-gray-800 flex items-center gap-2">
-                                      <div className="flex gap-1">
-                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                                      </div>
-                                      <span className="text-xs font-mono text-gray-400">example.ts</span>
-                                    </div>
-                                    <div className="p-3">
-                                      <code className="text-xs font-mono text-gray-300">
-                                        <span className="text-purple-400">imageAlt</span>
-                                        <span className="text-gray-500">: </span>
-                                        <span className="text-green-400">"A beautiful sunset over mountains"</span>
-                                      </code>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                    <strong>Default:</strong> <code className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">"Card image"</code> (if not provided). 
-                                    This text describes what the image shows. Important for accessibility and SEO.
-                                  </p>
-                                </div>
-                              )}
                             </div>
                           )}
                         </div>
@@ -2101,7 +2073,6 @@ import 'swiper/css/navigation';`}</code>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </main>
     </div>
