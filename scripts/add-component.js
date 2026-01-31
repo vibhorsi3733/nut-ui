@@ -235,19 +235,28 @@ const componentsConfigPath = path.join(__dirname, '../src/config/components.ts')
 let componentsConfig = fs.readFileSync(componentsConfigPath, 'utf8');
 
 if (!componentsConfig.includes(`id: '${componentName}'`)) {
-  // Find the last component entry
-  const lastComponentMatch = componentsConfig.match(/\{\s*id: '[^']+',[\s\S]*?\},?\s*$/m);
-  if (lastComponentMatch) {
-    const insertPosition = componentsConfig.indexOf(lastComponentMatch[0]) + lastComponentMatch[0].length;
-    const newComponent = `
+  // Find the position before the closing bracket or comment
+  const beforeClosingBracket = componentsConfig.lastIndexOf(']');
+  const beforeComment = componentsConfig.lastIndexOf('// Add more components');
+  const insertBefore = (beforeComment > 0 && beforeComment < beforeClosingBracket) ? beforeComment : beforeClosingBracket;
+  
+  // Get the text before insertion point
+  const textBefore = componentsConfig.slice(0, insertBefore).trim();
+  
+  // Check if last character before insertion is a comma
+  const needsComma = !textBefore.endsWith(',') && !textBefore.endsWith('[');
+  
+  // Create new component entry
+  const newComponent = `${needsComma ? ',' : ''}
   {
     id: '${componentName}',
     name: '${componentNamePascal}',
     description: 'Description of ${componentNamePascal} component',
     category: 'Layout'
   }`;
-    componentsConfig = componentsConfig.slice(0, insertPosition) + newComponent + componentsConfig.slice(insertPosition);
-  }
+  
+  // Insert before closing bracket or comment
+  componentsConfig = componentsConfig.slice(0, insertBefore) + newComponent + componentsConfig.slice(insertBefore);
 
   fs.writeFileSync(componentsConfigPath, componentsConfig);
   console.log('✅ Updated config/components.ts');

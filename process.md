@@ -274,3 +274,29 @@ The script automatically updates:
 3. **Update:** `codeRegistry.ts` with your component code
 
 **That's it!** Your component is ready. 🚀
+
+---
+
+## 🗑️ Remove a Component
+
+**Run one command:**
+
+```bash
+npm run remove-component <componentName>
+```
+
+**Example:**
+```bash
+npm run remove-component button
+```
+
+**What this does:**
+- ✅ Removes component folder (`src/developerComponent/button/`)
+- ✅ Removes from `componentCollection.ts`
+- ✅ Removes from `codeRegistry.ts`
+- ✅ Removes from `exampleRegistry.ts`
+- ✅ Removes from `config/components.ts`
+- ✅ Removes all variants from `config/variants.ts`
+- ✅ Removes variant folder (`src/components/variant/button/`)
+
+**Done!** Component is completely removed. 🎉

@@ -16,12 +16,6 @@ export const components: ComponentConfig[] = [
     category: 'Layout'
   },
   {
-    id: 'vibhor',
-    name: 'Vibhor',
-    description: 'Description of Vibhor component',
-    category: 'Layout'
-  }
-  {
     id: 'slider',
     name: 'Slider',
     description: 'Carousel slider component using Swiper with navigation',
