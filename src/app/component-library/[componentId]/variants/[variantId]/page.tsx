@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Card from '@/components/Card';
@@ -65,6 +65,12 @@ const VariantPage = () => {
   const variantId = params.variantId as string;
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedUsage, setCopiedUsage] = useState(false);
+  const [editableCSS, setEditableCSS] = useState<string>('');
+  const [editableData, setEditableData] = useState<string>('');
+  const [parseError, setParseError] = useState<string>('');
+  const [executedCSS, setExecutedCSS] = useState<any>(null);
+  const [executedData, setExecutedData] = useState<any>(null);
+  const initializedRef = useRef<string>('');
 
   // Get component and variant configs dynamically
   const component = components.find(c => c.id === componentId);
@@ -169,6 +175,69 @@ const VariantPage = () => {
       </div>
     );
   }
+
+  // Initialize editable values from variant config (only once when component/variant changes)
+  const currentKey = `${componentId}-${variantId}`;
+  useEffect(() => {
+    if (variantConfig && initializedRef.current !== currentKey) {
+      const cssString = JSON.stringify(variantConfig.css, null, 2);
+      const dataString = JSON.stringify(variantConfig.data, null, 2);
+      setEditableCSS(cssString);
+      setEditableData(dataString);
+      setExecutedCSS(null);
+      setExecutedData(null);
+      setParseError('');
+      initializedRef.current = currentKey;
+    }
+  }, [componentId, variantId, currentKey]);
+
+  // Handle Execute button click
+  const handleExecute = () => {
+    let cssError = '';
+    let dataError = '';
+    let parsedCSS = variantConfig?.css || {};
+    let parsedData = variantConfig?.data || {};
+
+    // Parse CSS
+    if (editableCSS) {
+      try {
+        parsedCSS = JSON.parse(editableCSS);
+        cssError = '';
+      } catch (e) {
+        cssError = 'Invalid JSON in CSS';
+      }
+    }
+
+    // Parse Data
+    if (editableData) {
+      try {
+        parsedData = JSON.parse(editableData);
+        dataError = '';
+      } catch (e) {
+        dataError = 'Invalid JSON in Data';
+      }
+    }
+
+    // Update error state
+    const error = cssError || dataError;
+    setParseError(error);
+
+    // Only update executed values if there are no errors
+    if (!error) {
+      setExecutedCSS(parsedCSS);
+      setExecutedData(parsedData);
+    }
+  };
+
+  // Use executed values for preview, fallback to original config
+  const previewConfig = useMemo(() => {
+    const css = executedCSS !== null ? executedCSS : (variantConfig?.css || {});
+    const data = executedData !== null ? executedData : (variantConfig?.data || {});
+    return {
+      css,
+      data
+    };
+  }, [executedCSS, executedData, variantConfig]);
 
   // Dynamic base component code - loaded from user_visible_code folder
   const getBaseComponentCode = () => {
@@ -629,6 +698,10 @@ export default Map;`;
 
   // Dynamic usage example - handle React components in footer
   const getUsageExample = () => {
+    // Use executed values if available, otherwise use original config
+    const displayCSS = executedCSS !== null ? executedCSS : (variantConfig?.css || {});
+    const displayData = executedData !== null ? executedData : (variantConfig?.data || {});
+
     if (componentId === 'slider') {
       return `// Example: Using ${variant.name} in your application
 
@@ -642,10 +715,10 @@ import 'swiper/css/navigation';
 
 function MyPage() {
   // Step 3: Define CSS object with all styling classes
-  const sliderCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const sliderCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Step 4: Define data object with slides array
-  const sliderData = ${JSON.stringify(variantConfig.data, null, 4)};
+  const sliderData = ${JSON.stringify(displayData, null, 4)};
 
   // Step 5: Use the component
   return (
@@ -710,10 +783,10 @@ import Table from '@/components/user_visible_code/Table';
 
 function MyPage() {
   // Define CSS object with all styling classes
-  const tableCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const tableCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Define data object with columns and rows
-  const tableData = ${JSON.stringify(variantConfig.data, null, 4)};
+  const tableData = ${JSON.stringify(displayData, null, 4)};
 
   // Use the component
   return (
@@ -733,10 +806,10 @@ import ClipCard from '@/components/user_visible_code/ClipCard';
 
 function MyPage() {
   // Define CSS object with all styling classes
-  const clipCardCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const clipCardCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Define data object with video information
-  const clipCardData = ${JSON.stringify(variantConfig.data, null, 4)};
+  const clipCardData = ${JSON.stringify(displayData, null, 4)};
 
   // Use the component
   // Note: Clicking the card will redirect to the URL specified in redirectUrl
@@ -757,10 +830,10 @@ import Chip from '@/components/user_visible_code/Chip';
 
 function MyPage() {
   // Define CSS object with all styling classes
-  const chipCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const chipCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Define data object with chip information
-  const chipData = ${JSON.stringify(variantConfig.data, null, 4)};
+  const chipData = ${JSON.stringify(displayData, null, 4)};
 
   // Use the component
   return (
@@ -780,10 +853,10 @@ import Map from '@/components/user_visible_code/Map';
 
 function MyPage() {
   // Define CSS object with all styling classes
-  const mapCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const mapCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Define data object with latitude and longitude
-  const mapData = ${JSON.stringify(variantConfig.data, null, 4)};
+  const mapData = ${JSON.stringify(displayData, null, 4)};
 
   // Use the component
   return (
@@ -802,10 +875,10 @@ import Card from '@/components/user_visible_code/Card';
 
 function MyPage() {
   // Define CSS object
-  const cardCSS = ${JSON.stringify(variantConfig.css, null, 4)};
+  const cardCSS = ${JSON.stringify(displayCSS, null, 4)};
 
   // Define data object
-  const cardData = ${JSON.stringify(variantConfig.data, null, 4)};
+  const cardData = ${JSON.stringify(displayData, null, 4)};
 
   // Use the component
   return (
@@ -890,30 +963,32 @@ export default MyPage;`;
             }`}>
               {componentId === 'slider' && variantId === 'news' ? (
                 <div className="w-full h-full flex items-center justify-center">
-                  <NewsSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                  <NewsSliderComponent css={previewConfig.css as any} data={previewConfig.data as any} />
                 </div>
               ) : componentId === 'slider' && variantId === 'matchScoreCard' ? (
                 <div className="w-full h-full flex items-center justify-center">
-                  <MatchScoreCardSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                  <MatchScoreCardSliderComponent css={previewConfig.css as any} data={previewConfig.data as any} />
                 </div>
               ) : componentId === 'slider' && variantId === 'matchScoreStack' ? (
                 <div className="w-full h-full flex items-center justify-center">
-                  <MatchScoreStackSliderComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                  <MatchScoreStackSliderComponent css={previewConfig.css as any} data={previewConfig.data as any} />
                 </div>
               ) : variantId === 'news' && componentId === 'card' ? (
-                <NewsCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                <NewsCardComponent css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : variantId === 'priceCardVarient' && componentId === 'card' ? (
-                <PriceCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                <PriceCardComponent css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'card' ? (
-                <Card css={variantConfig.css as any} data={variantConfig.data as any} />
+                <Card css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'table' ? (
-                <Table css={variantConfig.css as any} data={variantConfig.data as any} />
+                <Table css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'chip' ? (
-                <PopularSearchesComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                <PopularSearchesComponent css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'clipCard' ? (
-                <VideoCardComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                <VideoCardComponent css={previewConfig.css as any} data={previewConfig.data as any} />
+              ) : componentId === 'map' && variantId === 'googleMap' ? (
+                <GoogleMapComponent css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'map' ? (
-                <BasicMapComponent css={variantConfig.css as any} data={variantConfig.data as any} />
+                <BasicMapComponent css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : null}
             </div>
           </div>
@@ -999,6 +1074,60 @@ import 'swiper/css/navigation';`}</code>
               </div>
             </div>
           )}
+
+          {/* Editable CSS and Data Section */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Playground code edit here before copy the output</h2>
+            {parseError && (
+              <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm">
+                {parseError}
+              </div>
+            )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  CSS Object (JSON)
+                </label>
+                <textarea
+                  value={editableCSS}
+                  onChange={(e) => setEditableCSS(e.target.value)}
+                  className="w-full h-64 p-3 bg-gray-900 text-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#5f52ff] resize-none"
+                  spellCheck={false}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Data Object (JSON)
+                </label>
+                <textarea
+                  value={editableData}
+                  onChange={(e) => setEditableData(e.target.value)}
+                  className="w-full h-64 p-3 bg-gray-900 text-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#5f52ff] resize-none"
+                  spellCheck={false}
+                />
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={handleExecute}
+                className="px-6 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5f52ff] focus:ring-opacity-50 font-medium"
+              >
+                Execute
+              </button>
+              <button
+                onClick={() => {
+                  setEditableCSS(JSON.stringify(variantConfig?.css || {}, null, 2));
+                  setEditableData(JSON.stringify(variantConfig?.data || {}, null, 2));
+                  setExecutedCSS(null);
+                  setExecutedData(null);
+                  setParseError('');
+                }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+              >
+                Reset to Default
+              </button>
+            </div>
+          </div>
 
           {/* Usage Example Section */}
           <div className="mb-8">
