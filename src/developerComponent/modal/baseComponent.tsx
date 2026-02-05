@@ -25,7 +25,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ css, data }) => {
-  const bodyRef = useRef<HTMLBodyElement | null>(null);
+  const bodyRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     // Get body element reference using ref
@@ -53,13 +53,15 @@ const Modal: React.FC<ModalProps> = ({ css, data }) => {
     
     return React.Children.map(footer, (child) => {
       if (React.isValidElement(child)) {
+        const childElement = child as React.ReactElement<{ onClick?: (e: React.MouseEvent) => void; children?: React.ReactNode }>;
+        
         // Check if it's a button element
-        if (child.type === 'button') {
-          return React.cloneElement(child as React.ReactElement<any>, {
+        if (childElement.type === 'button') {
+          return React.cloneElement(childElement, {
             onClick: (e: React.MouseEvent) => {
               // Call original onClick if it exists
-              if (child.props.onClick) {
-                child.props.onClick(e);
+              if (childElement.props.onClick) {
+                childElement.props.onClick(e);
               }
               // Always close the modal
               data.onClose();
@@ -68,9 +70,9 @@ const Modal: React.FC<ModalProps> = ({ css, data }) => {
         }
         
         // If it's a fragment or has children, recurse
-        if (child.props && child.props.children) {
-          return React.cloneElement(child as React.ReactElement<any>, {
-            children: addCloseHandlersToFooter(child.props.children),
+        if (childElement.props && childElement.props.children) {
+          return React.cloneElement(childElement, {
+            children: addCloseHandlersToFooter(childElement.props.children),
           });
         }
       }
