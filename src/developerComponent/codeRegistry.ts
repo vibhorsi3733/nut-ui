@@ -533,15 +533,921 @@ const PriceCard: React.FC<PriceCardProps> = ({ css, data }) => {
 
 export default PriceCard;`;
 
+// Button Component Code
+export const buttonBaseCode = `import React from 'react';
+
+interface ButtonCSS {
+  button: string;
+}
+
+interface ButtonData {
+  label: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+interface ButtonProps {
+  css: ButtonCSS;
+  data: ButtonData;
+}
+
+const Button: React.FC<ButtonProps> = ({ css, data }) => {
+  return (
+    <button
+      type={data.type || 'button'}
+      onClick={data.onClick}
+      disabled={data.disabled}
+      className={css.button}
+    >
+      {data.label}
+    </button>
+  );
+};
+
+export default Button;`;
+
+// Badge Component Code
+export const badgeBaseCode = `import React from 'react';
+
+interface BadgeCSS {
+  badge: string;
+}
+
+interface BadgeData {
+  label: string;
+  count?: number;
+}
+
+interface BadgeProps {
+  css: BadgeCSS;
+  data: BadgeData;
+}
+
+const Badge: React.FC<BadgeProps> = ({ css, data }) => {
+  return (
+    <span className={css.badge}>
+      {data.label}
+      {data.count !== undefined && data.count > 0 && (
+        <span className="ml-1.5 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium">
+          {data.count}
+        </span>
+      )}
+    </span>
+  );
+};
+
+export default Badge;`;
+
+// Alert Component Code
+export const alertBaseCode = `import React from 'react';
+
+interface AlertCSS {
+  container: string;
+  icon: string;
+  title: string;
+  message: string;
+  closeButton: string;
+}
+
+interface AlertData {
+  title?: string;
+  message: string;
+  showClose?: boolean;
+  onClose?: () => void;
+  icon?: React.ReactNode;
+}
+
+interface AlertProps {
+  css: AlertCSS;
+  data: AlertData;
+}
+
+const Alert: React.FC<AlertProps> = ({ css, data }) => {
+  return (
+    <div className={css.container}>
+      {data.icon && <div className={css.icon}>{data.icon}</div>}
+      <div className="flex-1">
+        {data.title && <h3 className={css.title}>{data.title}</h3>}
+        <p className={css.message}>{data.message}</p>
+      </div>
+      {data.showClose && (
+        <button
+          onClick={data.onClose}
+          className={css.closeButton}
+          aria-label="Close"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default Alert;`;
+
+// Avatar Component Code
+export const avatarBaseCode = `import React from 'react';
+
+interface AvatarCSS {
+  container: string;
+  avatar: string;
+  image: string;
+  fallback: string;
+  group: string;
+}
+
+interface AvatarData {
+  src?: string;
+  alt?: string;
+  name?: string;
+  size?: 'sm' | 'md' | 'lg';
+  avatars?: Array<{ src?: string; alt?: string; name?: string }>;
+}
+
+interface AvatarProps {
+  css: AvatarCSS;
+  data: AvatarData;
+}
+
+const Avatar: React.FC<AvatarProps> = ({ css, data }) => {
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  if (data.avatars && data.avatars.length > 0) {
+    return (
+      <div className={css.group}>
+        {data.avatars.slice(0, 3).map((avatar, index) => (
+          <div key={index} className={css.avatar} style={{ zIndex: data.avatars!.length - index }}>
+            {avatar.src ? (
+              <img src={avatar.src} alt={avatar.alt || ''} className={css.image} />
+            ) : (
+              <div className={css.fallback}>
+                {avatar.name ? getInitials(avatar.name) : '?'}
+              </div>
+            )}
+          </div>
+        ))}
+        {data.avatars.length > 3 && (
+          <div className={css.avatar} style={{ zIndex: 0 }}>
+            <div className={css.fallback}>+{data.avatars.length - 3}</div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className={css.avatar}>
+      {data.src ? (
+        <img src={data.src} alt={data.alt || ''} className={css.image} />
+      ) : (
+        <div className={css.fallback}>
+          {data.name ? getInitials(data.name) : '?'}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Avatar;`;
+
+// Input Component Code
+export const inputBaseCode = `import React from 'react';
+
+interface InputCSS {
+  container: string;
+  label: string;
+  input: string;
+  helperText: string;
+  errorText: string;
+}
+
+interface InputData {
+  label?: string;
+  placeholder?: string;
+  value?: string;
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea';
+  rows?: number;
+  helperText?: string;
+  error?: string;
+  disabled?: boolean;
+  required?: boolean;
+  onChange?: (value: string) => void;
+}
+
+interface InputProps {
+  css: InputCSS;
+  data: InputData;
+}
+
+const Input: React.FC<InputProps> = ({ css, data }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (data.onChange) {
+      data.onChange(e.target.value);
+    }
+  };
+
+  return (
+    <div className={css.container}>
+      {data.label && (
+        <label className={css.label}>
+          {data.label}
+          {data.required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      )}
+      {data.type === 'textarea' ? (
+        <textarea
+          className={css.input}
+          placeholder={data.placeholder}
+          value={data.value}
+          rows={data.rows || 4}
+          disabled={data.disabled}
+          onChange={handleChange}
+        />
+      ) : (
+        <input
+          type={data.type || 'text'}
+          className={css.input}
+          placeholder={data.placeholder}
+          value={data.value}
+          disabled={data.disabled}
+          onChange={handleChange}
+        />
+      )}
+      {data.error && <p className={css.errorText}>{data.error}</p>}
+      {!data.error && data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+    </div>
+  );
+};
+
+export default Input;`;
+
+// Select Component Code
+export const selectBaseCode = `import React from 'react';
+
+interface SelectCSS {
+  container: string;
+  label: string;
+  select: string;
+  option: string;
+  helperText: string;
+  errorText: string;
+}
+
+interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+interface SelectData {
+  label?: string;
+  placeholder?: string;
+  options: SelectOption[];
+  value?: string | string[];
+  multiple?: boolean;
+  helperText?: string;
+  error?: string;
+  disabled?: boolean;
+  required?: boolean;
+  onChange?: (value: string | string[]) => void;
+}
+
+interface SelectProps {
+  css: SelectCSS;
+  data: SelectData;
+}
+
+const Select: React.FC<SelectProps> = ({ css, data }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (data.onChange) {
+      if (data.multiple) {
+        const selected = Array.from(e.target.selectedOptions, option => option.value);
+        data.onChange(selected);
+      } else {
+        data.onChange(e.target.value);
+      }
+    }
+  };
+
+  return (
+    <div className={css.container}>
+      {data.label && (
+        <label className={css.label}>
+          {data.label}
+          {data.required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      )}
+      <select
+        className={css.select}
+        value={data.value}
+        multiple={data.multiple}
+        disabled={data.disabled}
+        onChange={handleChange}
+      >
+        {data.placeholder && !data.multiple && (
+          <option value="" disabled>
+            {data.placeholder}
+          </option>
+        )}
+        {data.options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+            className={css.option}
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
+      {data.error && <p className={css.errorText}>{data.error}</p>}
+      {!data.error && data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+    </div>
+  );
+};
+
+export default Select;`;
+
+// Checkbox Component Code
+export const checkboxBaseCode = `import React from 'react';
+
+interface CheckboxCSS {
+  container: string;
+  checkbox: string;
+  label: string;
+  helperText: string;
+  errorText: string;
+  group: string;
+  item: string;
+}
+
+interface CheckboxOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+interface CheckboxData {
+  label?: string;
+  checked?: boolean;
+  value?: string;
+  options?: CheckboxOption[];
+  selectedValues?: string[];
+  helperText?: string;
+  error?: string;
+  disabled?: boolean;
+  onChange?: (checked: boolean, value?: string) => void;
+  onMultiChange?: (values: string[]) => void;
+}
+
+interface CheckboxProps {
+  css: CheckboxCSS;
+  data: CheckboxData;
+}
+
+const Checkbox: React.FC<CheckboxProps> = ({ css, data }) => {
+  const handleSingleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (data.onChange) {
+      data.onChange(e.target.checked, data.value);
+    }
+  };
+
+  const handleMultiChange = (value: string, checked: boolean) => {
+    if (data.onMultiChange && data.selectedValues) {
+      const newValues = checked
+        ? [...data.selectedValues, value]
+        : data.selectedValues.filter(v => v !== value);
+      data.onMultiChange(newValues);
+    }
+  };
+
+  if (data.options && data.options.length > 0) {
+    return (
+      <div className={css.group}>
+        {data.label && <label className={css.label}>{data.label}</label>}
+        {data.options.map((option) => (
+          <div key={option.value} className={css.item}>
+            <input
+              type="checkbox"
+              id={\`checkbox-\${option.value}\`}
+              className={css.checkbox}
+              checked={data.selectedValues?.includes(option.value) || false}
+              disabled={option.disabled || data.disabled}
+              onChange={(e) => handleMultiChange(option.value, e.target.checked)}
+            />
+            <label htmlFor={\`checkbox-\${option.value}\`} className={css.label}>
+              {option.label}
+            </label>
+          </div>
+        ))}
+        {data.error && <p className={css.errorText}>{data.error}</p>}
+        {!data.error && data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className={css.container}>
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          id={\`checkbox-\${data.value || 'single'}\`}
+          className={css.checkbox}
+          checked={data.checked || false}
+          disabled={data.disabled}
+          onChange={handleSingleChange}
+        />
+        {data.label && (
+          <label htmlFor={\`checkbox-\${data.value || 'single'}\`} className={css.label}>
+            {data.label}
+          </label>
+        )}
+      </div>
+      {data.error && <p className={css.errorText}>{data.error}</p>}
+      {!data.error && data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+    </div>
+  );
+};
+
+export default Checkbox;`;
+
+// Radio Component Code
+export const radioBaseCode = `import React from 'react';
+
+interface RadioCSS {
+  container: string;
+  radio: string;
+  label: string;
+  helperText: string;
+  errorText: string;
+  group: string;
+  item: string;
+}
+
+interface RadioOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+interface RadioData {
+  name: string;
+  label?: string;
+  value?: string;
+  options?: RadioOption[];
+  selectedValue?: string;
+  helperText?: string;
+  error?: string;
+  disabled?: boolean;
+  onChange?: (value: string) => void;
+}
+
+interface RadioProps {
+  css: RadioCSS;
+  data: RadioData;
+}
+
+const Radio: React.FC<RadioProps> = ({ css, data }) => {
+  const handleChange = (value: string) => {
+    if (data.onChange) {
+      data.onChange(value);
+    }
+  };
+
+  if (data.options && data.options.length > 0) {
+    return (
+      <div className={css.group}>
+        {data.label && <label className={css.label}>{data.label}</label>}
+        {data.options.map((option) => (
+          <div key={option.value} className={css.item}>
+            <input
+              type="radio"
+              id={\`radio-\${data.name}-\${option.value}\`}
+              name={data.name}
+              className={css.radio}
+              value={option.value}
+              checked={data.selectedValue === option.value}
+              disabled={option.disabled || data.disabled}
+              onChange={() => handleChange(option.value)}
+            />
+            <label htmlFor={\`radio-\${data.name}-\${option.value}\`} className={css.label}>
+              {option.label}
+            </label>
+          </div>
+        ))}
+        {data.error && <p className={css.errorText}>{data.error}</p>}
+        {!data.error && data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className={css.container}>
+      <div className="flex items-center">
+        <input
+          type="radio"
+          id={\`radio-\${data.name}-\${data.value || 'single'}\`}
+          name={data.name}
+          className={css.radio}
+          value={data.value}
+          checked={data.selectedValue === data.value}
+          disabled={data.disabled}
+          onChange={() => handleChange(data.value || '')}
+        />
+        {data.label && (
+          <label htmlFor={\`radio-\${data.name}-\${data.value || 'single'}\`} className={css.label}>
+            {data.label}
+          </label>
+        )}
+      </div>
+      {data.error && <p className={css.errorText}>{data.error}</p>}
+      {!data.error && data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+    </div>
+  );
+};
+
+export default Radio;`;
+
+// Toggle Component Code
+export const toggleBaseCode = `import React from 'react';
+
+interface ToggleCSS {
+  container: string;
+  toggle: string;
+  label: string;
+  helperText: string;
+}
+
+interface ToggleData {
+  label?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  helperText?: string;
+  onChange?: (checked: boolean) => void;
+}
+
+interface ToggleProps {
+  css: ToggleCSS;
+  data: ToggleData;
+}
+
+const Toggle: React.FC<ToggleProps> = ({ css, data }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (data.onChange) {
+      data.onChange(e.target.checked);
+    }
+  };
+
+  return (
+    <div className={css.container}>
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          id="toggle"
+          className={css.toggle}
+          checked={data.checked || false}
+          disabled={data.disabled}
+          onChange={handleChange}
+        />
+        {data.label && (
+          <label htmlFor="toggle" className={css.label}>
+            {data.label}
+          </label>
+        )}
+      </div>
+      {data.helperText && <p className={css.helperText}>{data.helperText}</p>}
+    </div>
+  );
+};
+
+export default Toggle;`;
+
+// Dropdown Component Code
+export const dropdownBaseCode = `import React, { useState, useRef, useEffect } from 'react';
+
+interface DropdownCSS {
+  container: string;
+  button: string;
+  menu: string;
+  item: string;
+  icon: string;
+}
+
+interface DropdownItem {
+  label: string;
+  value: string;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  divider?: boolean;
+}
+
+interface DropdownData {
+  label: string;
+  items: DropdownItem[];
+  placement?: 'left' | 'right';
+}
+
+interface DropdownProps {
+  css: DropdownCSS;
+  data: DropdownData;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  return (
+    <div className={css.container} ref={dropdownRef}>
+      <button
+        type="button"
+        className={css.button}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {data.label}
+        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {isOpen && (
+        <div className={\`\${css.menu} \${data.placement === 'right' ? 'right-0' : 'left-0'}\`}>
+          {data.items.map((item, index) => {
+            if (item.divider) {
+              return <div key={index} className="border-t border-gray-200 dark:border-gray-700 my-1" />;
+            }
+            return (
+              <button
+                key={item.value}
+                type="button"
+                className={css.item}
+                onClick={() => {
+                  if (item.onClick) item.onClick();
+                  setIsOpen(false);
+                }}
+                disabled={item.disabled}
+              >
+                {item.icon && <span className={css.icon}>{item.icon}</span>}
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Dropdown;`;
+
+// Modal Component Code
+export const modalBaseCode = `import React, { useEffect } from 'react';
+
+interface ModalCSS {
+  overlay: string;
+  container: string;
+  header: string;
+  title: string;
+  closeButton: string;
+  body: string;
+  footer: string;
+}
+
+interface ModalData {
+  isOpen: boolean;
+  title?: string;
+  children?: React.ReactNode;
+  footer?: React.ReactNode;
+  onClose: () => void;
+  showCloseButton?: boolean;
+}
+
+interface ModalProps {
+  css: ModalCSS;
+  data: ModalData;
+}
+
+const Modal: React.FC<ModalProps> = ({ css, data }) => {
+  useEffect(() => {
+    if (data.isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [data.isOpen]);
+
+  if (!data.isOpen) return null;
+
+  return (
+    <div className={css.overlay} onClick={data.onClose}>
+      <div className={css.container} onClick={(e) => e.stopPropagation()}>
+        {(data.title || data.showCloseButton !== false) && (
+          <div className={css.header}>
+            {data.title && <h3 className={css.title}>{data.title}</h3>}
+            {data.showCloseButton !== false && (
+              <button
+                onClick={data.onClose}
+                className={css.closeButton}
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+        )}
+        <div className={css.body}>
+          {data.children}
+        </div>
+        {data.footer && <div className={css.footer}>{data.footer}</div>}
+      </div>
+    </div>
+  );
+};
+
+export default Modal;`;
+
+// Tabs Component Code
+export const tabsBaseCode = `import React, { useState } from 'react';
+
+interface TabsCSS {
+  container: string;
+  list: string;
+  tab: string;
+  activeTab: string;
+  panel: string;
+}
+
+interface TabItem {
+  id: string;
+  label: string;
+  content: React.ReactNode;
+  disabled?: boolean;
+}
+
+interface TabsData {
+  tabs: TabItem[];
+  defaultTab?: string;
+  variant?: 'default' | 'pills';
+}
+
+interface TabsProps {
+  css: TabsCSS;
+  data: TabsData;
+}
+
+const Tabs: React.FC<TabsProps> = ({ css, data }) => {
+  const [activeTab, setActiveTab] = useState(data.defaultTab || data.tabs[0]?.id || '');
+
+  const activeTabContent = data.tabs.find(tab => tab.id === activeTab)?.content;
+
+  return (
+    <div className={css.container}>
+      <div className={css.list}>
+        {data.tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            className={\`\${css.tab} \${activeTab === tab.id ? css.activeTab : ''}\`}
+            onClick={() => !tab.disabled && setActiveTab(tab.id)}
+            disabled={tab.disabled}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className={css.panel}>
+        {activeTabContent}
+      </div>
+    </div>
+  );
+};
+
+export default Tabs;`;
+
+// Breadcrumb Component Code
+export const breadcrumbBaseCode = `import React from 'react';
+
+interface BreadcrumbCSS {
+  container: string;
+  list: string;
+  item: string;
+  link: string;
+  separator: string;
+  icon: string;
+}
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+  icon?: React.ReactNode;
+}
+
+interface BreadcrumbData {
+  items: BreadcrumbItem[];
+  separator?: 'slash' | 'chevron' | 'dot';
+}
+
+interface BreadcrumbProps {
+  css: BreadcrumbCSS;
+  data: BreadcrumbData;
+}
+
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ css, data }) => {
+  const getSeparator = () => {
+    switch (data.separator) {
+      case 'chevron':
+        return (
+          <svg className={css.separator} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        );
+      case 'dot':
+        return <span className={css.separator}>•</span>;
+      default:
+        return <span className={css.separator}>/</span>;
+    }
+  };
+
+  return (
+    <nav className={css.container}>
+      <ol className={css.list}>
+        {data.items.map((item, index) => (
+          <li key={index} className={css.item}>
+            {index > 0 && getSeparator()}
+            {item.href ? (
+              <a href={item.href} className={css.link}>
+                {item.icon && <span className={css.icon}>{item.icon}</span>}
+                {item.label}
+              </a>
+            ) : (
+              <span className={css.link}>
+                {item.icon && <span className={css.icon}>{item.icon}</span>}
+                {item.label}
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+};
+
+export default Breadcrumb;`;
+
 // Component code mapping
 
 export const componentCodeMap: Record<string, string> = {
   card: cardBaseCode,
-  slider: sliderBaseCode,table: tableBaseCode,
+  slider: sliderBaseCode,
+  table: tableBaseCode,
   chip: chipBaseCode,
   clipCard: clipCardBaseCode,
   map: mapBaseCode,
   priceCardVarient: priceCardBaseCode,
+  button: buttonBaseCode,
+  badge: badgeBaseCode,
+  alert: alertBaseCode,
+  avatar: avatarBaseCode,
+  input: inputBaseCode,
+  select: selectBaseCode,
+  checkbox: checkboxBaseCode,
+  radio: radioBaseCode,
+  toggle: toggleBaseCode,
+  dropdown: dropdownBaseCode,
+  modal: modalBaseCode,
+  tabs: tabsBaseCode,
+  breadcrumb: breadcrumbBaseCode,
 };
 
 // Helper function to get component code

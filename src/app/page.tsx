@@ -47,9 +47,13 @@ const HomePage = () => {
               <span className="font-display font-bold text-base sm:text-lg text-gray-900 dark:text-white">NUT UI</span>
             </Link>
             <nav className="flex items-center space-x-3 sm:space-x-6">
-              <Link href="/component-library" className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white relative group">
+              <Link href="/component-library" className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
                 Components
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#5f52ff]"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#5f52ff] group-hover:w-full transition-all duration-300"></span>
+              </Link>
+              <Link href="/generic-components" className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
+                Generic Components
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#5f52ff] group-hover:w-full transition-all duration-300"></span>
               </Link>
               <a href="#" className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
                 Docs

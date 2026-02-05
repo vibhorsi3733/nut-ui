@@ -82,6 +82,10 @@ const ComponentLibraryPage = () => {
                 Components
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#5f52ff]"></span>
               </Link>
+              <Link href="/generic-components" className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors relative group">
+                Generic Components
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#5f52ff] group-hover:w-full transition-all duration-300"></span>
+              </Link>
             </nav>
           </div>
         </div>

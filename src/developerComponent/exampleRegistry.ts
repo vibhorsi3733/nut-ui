@@ -247,6 +247,47 @@ function MyPage() {
 export default MyPage;`;
   }
 
+  // Generic Components
+  const genericComponentMap: Record<string, string> = {
+    button: 'Button',
+    badge: 'Badge',
+    alert: 'Alert',
+    avatar: 'Avatar',
+    input: 'Input',
+    select: 'Select',
+    checkbox: 'Checkbox',
+    radio: 'Radio',
+    toggle: 'Toggle',
+    dropdown: 'Dropdown',
+    modal: 'Modal',
+    tabs: 'Tabs',
+    breadcrumb: 'Breadcrumb',
+  };
+
+  const componentName = genericComponentMap[componentId];
+  if (componentName) {
+    return `// Example: Using ${variant.name} in your application
+
+import { ${componentName} } from '@/developerComponent/componentCollection';
+
+function MyPage() {
+  // Define CSS object with all styling classes
+  const ${componentId}CSS = ${JSON.stringify(displayCSS, null, 4)};
+
+  // Define data object
+  const ${componentId}Data = ${JSON.stringify(displayData, null, 4)};
+
+  // Use the component
+  return (
+    <div className="container mx-auto p-4">
+      <${componentName} css={${componentId}CSS} data={${componentId}Data} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+  }
+
   // Default fallback
   return `// Example: Using ${variant.name} in your application
 
