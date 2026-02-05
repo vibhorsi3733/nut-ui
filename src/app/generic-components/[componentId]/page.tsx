@@ -11,8 +11,6 @@ import { Badge } from '@/developerComponent/componentCollection';
 import { Alert } from '@/developerComponent/componentCollection';
 import { Avatar } from '@/developerComponent/componentCollection';
 import { Input } from '@/developerComponent/componentCollection';
-import { Select } from '@/developerComponent/componentCollection';
-import { Toggle } from '@/developerComponent/componentCollection';
 import { Dropdown } from '@/developerComponent/componentCollection';
 import { Modal } from '@/developerComponent/componentCollection';
 import { Tabs } from '@/developerComponent/componentCollection';
@@ -47,18 +45,6 @@ import {
   textareaInputCSS,
   textareaInputData
 } from '@/components/variant/input';
-import {
-  singleSelectCSS,
-  singleSelectData,
-  multiSelectCSS,
-  multiSelectData
-} from '@/components/variant/select';
-import {
-  defaultToggleCSS,
-  defaultToggleData,
-  largeToggleCSS,
-  largeToggleData
-} from '@/components/variant/toggle';
 import {
   simpleDropdownCSS,
   simpleDropdownData,
@@ -160,24 +146,6 @@ const GenericComponentPage = () => {
           default:
             return null;
         }
-      case 'select':
-        switch (variantId) {
-          case 'single':
-            return { css: singleSelectCSS, data: singleSelectData };
-          case 'multi':
-            return { css: multiSelectCSS, data: multiSelectData };
-          default:
-            return null;
-        }
-      case 'toggle':
-        switch (variantId) {
-          case 'default':
-            return { css: defaultToggleCSS, data: defaultToggleData };
-          case 'large':
-            return { css: largeToggleCSS, data: largeToggleData };
-          default:
-            return null;
-        }
       case 'dropdown':
         switch (variantId) {
           case 'simple':
@@ -250,7 +218,6 @@ const GenericComponentPage = () => {
       alert: Alert,
       avatar: Avatar,
       input: Input,
-      select: Select,
       toggle: Toggle,
       dropdown: Dropdown,
       modal: Modal,

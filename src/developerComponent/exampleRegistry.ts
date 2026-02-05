@@ -258,8 +258,6 @@ export default MyPage;`;
     alert: 'Alert',
     avatar: 'Avatar',
     input: 'Input',
-    select: 'Select',
-    toggle: 'Toggle',
     dropdown: 'Dropdown',
     modal: 'Modal',
     tabs: 'Tabs',

@@ -8,8 +8,6 @@ import { Badge } from '@/developerComponent/componentCollection';
 import { Alert } from '@/developerComponent/componentCollection';
 import { Avatar } from '@/developerComponent/componentCollection';
 import { Input } from '@/developerComponent/componentCollection';
-import { Select } from '@/developerComponent/componentCollection';
-import { Toggle } from '@/developerComponent/componentCollection';
 import { Dropdown } from '@/developerComponent/componentCollection';
 import { Modal } from '@/developerComponent/componentCollection';
 import { Tabs } from '@/developerComponent/componentCollection';
@@ -50,22 +48,12 @@ import {
   textareaInputData
 } from '@/components/variant/input';
 import {
-  singleSelectCSS,
-  singleSelectData,
-  multiSelectCSS,
-  multiSelectData
-} from '@/components/variant/select';
-import {
-  defaultToggleCSS,
-  defaultToggleData,
-  largeToggleCSS,
-  largeToggleData
-} from '@/components/variant/toggle';
-import {
   simpleDropdownCSS,
   simpleDropdownData,
   withIconsDropdownCSS,
-  withIconsDropdownData
+  withIconsDropdownData,
+  multiSelectDropdownCSS,
+  multiSelectDropdownData
 } from '@/components/variant/dropdown';
 import {
   simpleModalCSS,
@@ -169,30 +157,14 @@ const VariantPage = () => {
           default:
             return null;
         }
-      case 'select':
-        switch (variantId) {
-          case 'single':
-            return { css: singleSelectCSS, data: singleSelectData };
-          case 'multi':
-            return { css: multiSelectCSS, data: multiSelectData };
-          default:
-            return null;
-        }
-      case 'toggle':
-        switch (variantId) {
-          case 'default':
-            return { css: defaultToggleCSS, data: defaultToggleData };
-          case 'large':
-            return { css: largeToggleCSS, data: largeToggleData };
-          default:
-            return null;
-        }
       case 'dropdown':
         switch (variantId) {
           case 'simple':
             return { css: simpleDropdownCSS, data: simpleDropdownData };
           case 'withIcons':
             return { css: withIconsDropdownCSS, data: withIconsDropdownData };
+          case 'multiSelect':
+            return { css: multiSelectDropdownCSS, data: multiSelectDropdownData };
           default:
             return null;
         }
@@ -359,28 +331,6 @@ const VariantPage = () => {
           { key: 'disabled', title: 'disabled', type: 'boolean | undefined', description: 'Disables the input when true. Optional.', hasDetails: false },
           { key: 'required', title: 'required', type: 'boolean | undefined', description: 'Marks input as required. Optional.', hasDetails: false },
           { key: 'onChange', title: 'onChange', type: '(value: string) => void | undefined', description: 'Change handler function. Called with new value when input changes. Optional.', hasDetails: false }
-        ];
-      case 'select':
-        return [
-          { key: 'label', title: 'label', type: 'string | undefined', description: 'Select label text. Optional.', hasDetails: false },
-          { key: 'placeholder', title: 'placeholder', type: 'string | undefined', description: 'Placeholder text. Optional.', hasDetails: false },
-          { key: 'options', title: 'options', type: 'Array<{value: string, label: string, disabled?: boolean}>', description: 'Array of select options. Each option has value, label, and optional disabled. Required.', hasDetails: true },
-          { key: 'value', title: 'value', type: 'string | string[] | undefined', description: 'Selected value(s). Use array for multiple selection. Optional.', hasDetails: false },
-          { key: 'multiple', title: 'multiple', type: 'boolean | undefined', description: 'Enables multiple selection when true. Optional.', hasDetails: false },
-          { key: 'helperText', title: 'helperText', type: 'string | undefined', description: 'Helper text. Optional.', hasDetails: false },
-          { key: 'error', title: 'error', type: 'string | undefined', description: 'Error message. Optional.', hasDetails: false },
-          { key: 'disabled', title: 'disabled', type: 'boolean | undefined', description: 'Disables the select. Optional.', hasDetails: false },
-          { key: 'required', title: 'required', type: 'boolean | undefined', description: 'Marks select as required. Optional.', hasDetails: false },
-          { key: 'onChange', title: 'onChange', type: '(value: string | string[]) => void | undefined', description: 'Change handler. Called with selected value(s). Optional.', hasDetails: false }
-        ];
-      case 'toggle':
-        return [
-          { key: 'label', title: 'label', type: 'string | undefined', description: 'Toggle label text. Optional.', hasDetails: false },
-          { key: 'checked', title: 'checked', type: 'boolean | undefined', description: 'Checked state. Optional.', hasDetails: false },
-          { key: 'disabled', title: 'disabled', type: 'boolean | undefined', description: 'Disables the toggle. Optional.', hasDetails: false },
-          { key: 'size', title: 'size', type: '"sm" | "md" | "lg" | undefined', description: 'Toggle size. Optional.', hasDetails: false },
-          { key: 'helperText', title: 'helperText', type: 'string | undefined', description: 'Helper text. Optional.', hasDetails: false },
-          { key: 'onChange', title: 'onChange', type: '(checked: boolean) => void | undefined', description: 'Change handler. Called with new checked state. Optional.', hasDetails: false }
         ];
       case 'dropdown':
         return [
@@ -723,10 +673,6 @@ const VariantPage = () => {
                 <Avatar css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'input' ? (
                 <Input css={previewConfig.css as any} data={previewConfig.data as any} />
-              ) : componentId === 'select' ? (
-                <Select css={previewConfig.css as any} data={previewConfig.data as any} />
-              ) : componentId === 'toggle' ? (
-                <Toggle css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'dropdown' ? (
                 <Dropdown css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'modal' ? (

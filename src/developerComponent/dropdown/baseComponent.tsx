@@ -6,6 +6,7 @@ interface DropdownCSS {
   menu: string;
   item: string;
   icon: string;
+  checkbox?: string;
 }
 
 interface DropdownItem {
@@ -15,12 +16,14 @@ interface DropdownItem {
   onClick?: () => void;
   disabled?: boolean;
   divider?: boolean;
+  selected?: boolean;
 }
 
 interface DropdownData {
   label: string;
   items: DropdownItem[];
   placement?: 'left' | 'right';
+  multiSelect?: boolean;
 }
 
 interface DropdownProps {
@@ -30,6 +33,9 @@ interface DropdownProps {
 
 const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(
+    new Set(data.items.filter(item => item.selected).map(item => item.value))
+  );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,6 +54,38 @@ const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
     };
   }, [isOpen]);
 
+  const handleItemClick = (item: DropdownItem) => {
+    if (item.disabled) return;
+
+    if (data.multiSelect) {
+      // Multi-select: toggle selection
+      const newSelected = new Set(selectedItems);
+      if (newSelected.has(item.value)) {
+        newSelected.delete(item.value);
+      } else {
+        newSelected.add(item.value);
+      }
+      setSelectedItems(newSelected);
+      // Don't close dropdown in multi-select mode
+    } else {
+      // Single select: close dropdown and call onClick
+      if (item.onClick) item.onClick();
+      setIsOpen(false);
+    }
+  };
+
+  const getButtonLabel = () => {
+    if (data.multiSelect && selectedItems.size > 0) {
+      const selectedLabels = data.items
+        .filter(item => selectedItems.has(item.value))
+        .map(item => item.label);
+      return selectedLabels.length > 0 
+        ? `${data.label} (${selectedLabels.length} selected)`
+        : data.label;
+    }
+    return data.label;
+  };
+
   return (
     <div className={css.container} ref={dropdownRef}>
       <button
@@ -57,7 +95,7 @@ const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        {data.label}
+        {getButtonLabel()}
         <svg 
           className={`w-4 h-4 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
           fill="none" 
@@ -77,20 +115,26 @@ const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
             if (item.divider) {
               return <div key={index} className="border-t border-gray-200 dark:border-gray-700 my-1" />;
             }
+            const isSelected = data.multiSelect ? selectedItems.has(item.value) : false;
+            
             return (
               <button
                 key={item.value}
                 type="button"
                 className={`${css.item} ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={() => {
-                  if (!item.disabled) {
-                    if (item.onClick) item.onClick();
-                    setIsOpen(false);
-                  }
-                }}
+                onClick={() => handleItemClick(item)}
                 disabled={item.disabled}
                 role="menuitem"
               >
+                {data.multiSelect && css.checkbox && (
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => handleItemClick(item)}
+                    className={css.checkbox}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                )}
                 {item.icon && <span className={css.icon}>{item.icon}</span>}
                 {item.label}
               </button>

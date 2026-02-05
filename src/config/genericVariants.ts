@@ -74,32 +74,6 @@ export const genericVariants: GenericVariantConfig[] = [
     description: 'Multi-line textarea input field',
     componentId: 'input'
   },
-  // Select variants
-  {
-    id: 'single',
-    name: 'Single Select',
-    description: 'Dropdown select for single option selection',
-    componentId: 'select'
-  },
-  {
-    id: 'multi',
-    name: 'Multi Select',
-    description: 'Dropdown select for multiple option selection',
-    componentId: 'select'
-  },
-  // Toggle variants
-  {
-    id: 'default',
-    name: 'Default Toggle',
-    description: 'Standard toggle switch',
-    componentId: 'toggle'
-  },
-  {
-    id: 'large',
-    name: 'Large Toggle',
-    description: 'Large toggle switch variant',
-    componentId: 'toggle'
-  },
   // Dropdown variants
   {
     id: 'simple',
@@ -111,6 +85,12 @@ export const genericVariants: GenericVariantConfig[] = [
     id: 'withIcons',
     name: 'Dropdown with Icons',
     description: 'Dropdown menu with icon items',
+    componentId: 'dropdown'
+  },
+  {
+    id: 'multiSelect',
+    name: 'Multi-Select Dropdown',
+    description: 'Dropdown with checkboxes for multiple selection',
     componentId: 'dropdown'
   },
   // Modal variants

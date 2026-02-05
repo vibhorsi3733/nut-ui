@@ -10,8 +10,6 @@ import { Badge } from '@/developerComponent/componentCollection';
 import { Alert } from '@/developerComponent/componentCollection';
 import { Avatar } from '@/developerComponent/componentCollection';
 import { Input } from '@/developerComponent/componentCollection';
-import { Select } from '@/developerComponent/componentCollection';
-import { Toggle } from '@/developerComponent/componentCollection';
 import { Dropdown } from '@/developerComponent/componentCollection';
 import { Modal } from '@/developerComponent/componentCollection';
 import { Tabs } from '@/developerComponent/componentCollection';
@@ -21,8 +19,6 @@ import { solidBadgeCSS, solidBadgeData } from '@/components/variant/badge';
 import { successAlertCSS, successAlertData } from '@/components/variant/alert';
 import { singleAvatarCSS, singleAvatarData } from '@/components/variant/avatar';
 import { textInputCSS, textInputData } from '@/components/variant/input';
-import { singleSelectCSS, singleSelectData } from '@/components/variant/select';
-import { defaultToggleCSS, defaultToggleData } from '@/components/variant/toggle';
 import { simpleDropdownCSS, simpleDropdownData } from '@/components/variant/dropdown';
 import { defaultTabsCSS, defaultTabsData } from '@/components/variant/tabs';
 import { simpleBreadcrumbCSS, simpleBreadcrumbData } from '@/components/variant/breadcrumb';
@@ -44,10 +40,6 @@ const GenericComponentsPage = () => {
         return <Avatar css={singleAvatarCSS} data={singleAvatarData} />;
       case 'input':
         return <Input css={textInputCSS} data={textInputData} />;
-      case 'select':
-        return <Select css={singleSelectCSS} data={singleSelectData} />;
-      case 'toggle':
-        return <Toggle css={defaultToggleCSS} data={defaultToggleData} />;
       case 'dropdown':
         return <Dropdown css={simpleDropdownCSS} data={simpleDropdownData} />;
       case 'modal':

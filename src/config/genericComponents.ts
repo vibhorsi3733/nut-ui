@@ -40,18 +40,6 @@ export const genericComponents: GenericComponentConfig[] = [
     category: 'Form'
   },
   {
-    id: 'select',
-    name: 'Select',
-    description: 'Dropdown select component for single or multiple selection',
-    category: 'Form'
-  },
-  {
-    id: 'toggle',
-    name: 'Toggle',
-    description: 'Toggle switch component for on/off states',
-    category: 'Form'
-  },
-  {
     id: 'dropdown',
     name: 'Dropdown',
     description: 'Dropdown menu component with customizable items',
