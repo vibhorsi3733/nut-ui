@@ -218,7 +218,6 @@ const GenericComponentPage = () => {
       alert: Alert,
       avatar: Avatar,
       input: Input,
-      toggle: Toggle,
       dropdown: Dropdown,
       modal: Modal,
       tabs: Tabs,
