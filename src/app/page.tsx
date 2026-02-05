@@ -381,7 +381,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-            © {new Date().getFullYear()} NUT UI. Built with React, TypeScript, and Tailwind CSS.
+            © {new Date().getFullYear()} NUT UI. Built with React, TypeScript By Vibhor Shandilya -Sportz Interactive
           </div>
         </div>
       </footer>
