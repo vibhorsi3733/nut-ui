@@ -36,6 +36,37 @@ const Modal: React.FC<ModalProps> = ({ css, data }) => {
     };
   }, [data.isOpen]);
 
+  // Helper function to add onClick handlers to footer buttons
+  const addCloseHandlersToFooter = (footer: React.ReactNode): React.ReactNode => {
+    if (!footer) return null;
+    
+    return React.Children.map(footer, (child) => {
+      if (React.isValidElement(child)) {
+        // Check if it's a button element
+        if (child.type === 'button') {
+          return React.cloneElement(child as React.ReactElement<any>, {
+            onClick: (e: React.MouseEvent) => {
+              // Call original onClick if it exists
+              if (child.props.onClick) {
+                child.props.onClick(e);
+              }
+              // Always close the modal
+              data.onClose();
+            },
+          });
+        }
+        
+        // If it's a fragment or has children, recurse
+        if (child.props && child.props.children) {
+          return React.cloneElement(child as React.ReactElement<any>, {
+            children: addCloseHandlersToFooter(child.props.children),
+          });
+        }
+      }
+      return child;
+    });
+  };
+
   if (!data.isOpen) return null;
 
   return (
@@ -60,7 +91,7 @@ const Modal: React.FC<ModalProps> = ({ css, data }) => {
         <div className={css.body}>
           {data.children}
         </div>
-        {data.footer && <div className={css.footer}>{data.footer}</div>}
+        {data.footer && <div className={css.footer}>{addCloseHandlersToFooter(data.footer)}</div>}
       </div>
     </div>
   );

@@ -46,18 +46,6 @@ export const genericComponents: GenericComponentConfig[] = [
     category: 'Form'
   },
   {
-    id: 'checkbox',
-    name: 'Checkbox',
-    description: 'Checkbox component for single or multiple selection',
-    category: 'Form'
-  },
-  {
-    id: 'radio',
-    name: 'Radio',
-    description: 'Radio button component for single selection from a group',
-    category: 'Form'
-  },
-  {
     id: 'toggle',
     name: 'Toggle',
     description: 'Toggle switch component for on/off states',

@@ -11,8 +11,6 @@ import { Alert } from '@/developerComponent/componentCollection';
 import { Avatar } from '@/developerComponent/componentCollection';
 import { Input } from '@/developerComponent/componentCollection';
 import { Select } from '@/developerComponent/componentCollection';
-import { Checkbox } from '@/developerComponent/componentCollection';
-import { Radio } from '@/developerComponent/componentCollection';
 import { Toggle } from '@/developerComponent/componentCollection';
 import { Dropdown } from '@/developerComponent/componentCollection';
 import { Modal } from '@/developerComponent/componentCollection';
@@ -24,8 +22,6 @@ import { successAlertCSS, successAlertData } from '@/components/variant/alert';
 import { singleAvatarCSS, singleAvatarData } from '@/components/variant/avatar';
 import { textInputCSS, textInputData } from '@/components/variant/input';
 import { singleSelectCSS, singleSelectData } from '@/components/variant/select';
-import { singleCheckboxCSS, singleCheckboxData } from '@/components/variant/checkbox';
-import { singleRadioCSS, singleRadioData } from '@/components/variant/radio';
 import { defaultToggleCSS, defaultToggleData } from '@/components/variant/toggle';
 import { simpleDropdownCSS, simpleDropdownData } from '@/components/variant/dropdown';
 import { defaultTabsCSS, defaultTabsData } from '@/components/variant/tabs';
@@ -50,10 +46,6 @@ const GenericComponentsPage = () => {
         return <Input css={textInputCSS} data={textInputData} />;
       case 'select':
         return <Select css={singleSelectCSS} data={singleSelectData} />;
-      case 'checkbox':
-        return <Checkbox css={singleCheckboxCSS} data={singleCheckboxData} />;
-      case 'radio':
-        return <Radio css={singleRadioCSS} data={{ ...singleRadioData, name: 'preview' }} />;
       case 'toggle':
         return <Toggle css={defaultToggleCSS} data={defaultToggleData} />;
       case 'dropdown':

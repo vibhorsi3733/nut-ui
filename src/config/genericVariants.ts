@@ -87,32 +87,6 @@ export const genericVariants: GenericVariantConfig[] = [
     description: 'Dropdown select for multiple option selection',
     componentId: 'select'
   },
-  // Checkbox variants
-  {
-    id: 'single',
-    name: 'Single Checkbox',
-    description: 'Single checkbox for boolean selection',
-    componentId: 'checkbox'
-  },
-  {
-    id: 'group',
-    name: 'Checkbox Group',
-    description: 'Multiple checkboxes for multi-selection',
-    componentId: 'checkbox'
-  },
-  // Radio variants
-  {
-    id: 'single',
-    name: 'Single Radio',
-    description: 'Single radio button',
-    componentId: 'radio'
-  },
-  {
-    id: 'group',
-    name: 'Radio Group',
-    description: 'Radio button group for single selection',
-    componentId: 'radio'
-  },
   // Toggle variants
   {
     id: 'default',

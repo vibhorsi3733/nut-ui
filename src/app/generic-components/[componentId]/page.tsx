@@ -12,8 +12,6 @@ import { Alert } from '@/developerComponent/componentCollection';
 import { Avatar } from '@/developerComponent/componentCollection';
 import { Input } from '@/developerComponent/componentCollection';
 import { Select } from '@/developerComponent/componentCollection';
-import { Checkbox } from '@/developerComponent/componentCollection';
-import { Radio } from '@/developerComponent/componentCollection';
 import { Toggle } from '@/developerComponent/componentCollection';
 import { Dropdown } from '@/developerComponent/componentCollection';
 import { Modal } from '@/developerComponent/componentCollection';
@@ -55,18 +53,6 @@ import {
   multiSelectCSS,
   multiSelectData
 } from '@/components/variant/select';
-import {
-  singleCheckboxCSS,
-  singleCheckboxData,
-  groupCheckboxCSS,
-  groupCheckboxData
-} from '@/components/variant/checkbox';
-import {
-  singleRadioCSS,
-  singleRadioData,
-  groupRadioCSS,
-  groupRadioData
-} from '@/components/variant/radio';
 import {
   defaultToggleCSS,
   defaultToggleData,
@@ -183,24 +169,6 @@ const GenericComponentPage = () => {
           default:
             return null;
         }
-      case 'checkbox':
-        switch (variantId) {
-          case 'single':
-            return { css: singleCheckboxCSS, data: singleCheckboxData };
-          case 'group':
-            return { css: groupCheckboxCSS, data: groupCheckboxData };
-          default:
-            return null;
-        }
-      case 'radio':
-        switch (variantId) {
-          case 'single':
-            return { css: singleRadioCSS, data: { ...singleRadioData, name: 'preview' } };
-          case 'group':
-            return { css: groupRadioCSS, data: groupRadioData };
-          default:
-            return null;
-        }
       case 'toggle':
         switch (variantId) {
           case 'default':
@@ -283,8 +251,6 @@ const GenericComponentPage = () => {
       avatar: Avatar,
       input: Input,
       select: Select,
-      checkbox: Checkbox,
-      radio: Radio,
       toggle: Toggle,
       dropdown: Dropdown,
       modal: Modal,

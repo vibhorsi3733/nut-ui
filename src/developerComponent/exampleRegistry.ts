@@ -10,6 +10,8 @@
 
 import { components } from '@/config/components';
 import { variants } from '@/config/variants';
+import { genericComponents } from '@/config/genericComponents';
+import { genericVariants } from '@/config/genericVariants';
 
 // Helper function to get example code for a component
 export const getExampleCode = (
@@ -18,8 +20,10 @@ export const getExampleCode = (
   displayCSS: any,
   displayData: any
 ): string => {
-  const component = components.find(c => c.id === componentId);
-  const variant = variants.find(v => v.id === variantId && v.componentId === componentId);
+  // Check both regular and generic components
+  const component = components.find(c => c.id === componentId) || genericComponents.find(c => c.id === componentId);
+  const variant = variants.find(v => v.id === variantId && v.componentId === componentId) || 
+                  genericVariants.find(v => v.id === variantId && v.componentId === componentId);
   
   if (!component || !variant) {
     return '// Example code not available';
@@ -255,8 +259,6 @@ export default MyPage;`;
     avatar: 'Avatar',
     input: 'Input',
     select: 'Select',
-    checkbox: 'Checkbox',
-    radio: 'Radio',
     toggle: 'Toggle',
     dropdown: 'Dropdown',
     modal: 'Modal',
@@ -266,6 +268,48 @@ export default MyPage;`;
 
   const componentName = genericComponentMap[componentId];
   if (componentName) {
+    // Special case for Modal - needs state management and button trigger
+    if (componentId === 'modal') {
+      // Create a copy of displayData without isOpen and onClose for the example
+      const modalDataForExample = { ...displayData };
+      delete modalDataForExample.isOpen;
+      delete modalDataForExample.onClose;
+      
+      return `// Example: Using ${variant.name} in your application
+
+import { useState } from 'react';
+import { ${componentName} } from '@/developerComponent/componentCollection';
+
+function MyPage() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Define CSS object with all styling classes
+  const ${componentId}CSS = ${JSON.stringify(displayCSS, null, 4)};
+
+  // Define data object with state management
+  const ${componentId}Data = {
+    ...${JSON.stringify(modalDataForExample, null, 4)},
+    isOpen: isOpen,
+    onClose: () => setIsOpen(false)
+  };
+
+  // Use the component with a trigger button
+  return (
+    <div className="container mx-auto p-4">
+      <button
+        onClick={() => setIsOpen(true)}
+        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Open Modal
+      </button>
+      <${componentName} css={${componentId}CSS} data={${componentId}Data} />
+    </div>
+  );
+}
+
+export default MyPage;`;
+    }
+    
     return `// Example: Using ${variant.name} in your application
 
 import { ${componentName} } from '@/developerComponent/componentCollection';

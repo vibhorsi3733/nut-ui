@@ -9,8 +9,6 @@ import { Alert } from '@/developerComponent/componentCollection';
 import { Avatar } from '@/developerComponent/componentCollection';
 import { Input } from '@/developerComponent/componentCollection';
 import { Select } from '@/developerComponent/componentCollection';
-import { Checkbox } from '@/developerComponent/componentCollection';
-import { Radio } from '@/developerComponent/componentCollection';
 import { Toggle } from '@/developerComponent/componentCollection';
 import { Dropdown } from '@/developerComponent/componentCollection';
 import { Modal } from '@/developerComponent/componentCollection';
@@ -58,18 +56,6 @@ import {
   multiSelectData
 } from '@/components/variant/select';
 import {
-  singleCheckboxCSS,
-  singleCheckboxData,
-  groupCheckboxCSS,
-  groupCheckboxData
-} from '@/components/variant/checkbox';
-import {
-  singleRadioCSS,
-  singleRadioData,
-  groupRadioCSS,
-  groupRadioData
-} from '@/components/variant/radio';
-import {
   defaultToggleCSS,
   defaultToggleData,
   largeToggleCSS,
@@ -111,6 +97,7 @@ const VariantPage = () => {
   const [parseError, setParseError] = useState<string>('');
   const [executedCSS, setExecutedCSS] = useState<any>(null);
   const [executedData, setExecutedData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const initializedRef = useRef<string>('');
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set(['css-props', 'data-props']));
 
@@ -124,7 +111,7 @@ const VariantPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variant Not Found</h1>
           <Link 
-            href={`/component-library/${componentId}`} 
+            href={`/generic-components/${componentId}`} 
             className="px-4 py-2 bg-[#5f52ff] text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Back to {component?.name || 'Component'} Variants
@@ -191,24 +178,6 @@ const VariantPage = () => {
           default:
             return null;
         }
-      case 'checkbox':
-        switch (variantId) {
-          case 'single':
-            return { css: singleCheckboxCSS, data: singleCheckboxData };
-          case 'group':
-            return { css: groupCheckboxCSS, data: groupCheckboxData };
-          default:
-            return null;
-        }
-      case 'radio':
-        switch (variantId) {
-          case 'single':
-            return { css: singleRadioCSS, data: { ...singleRadioData, name: 'preview' } };
-          case 'group':
-            return { css: groupRadioCSS, data: groupRadioData };
-          default:
-            return null;
-        }
       case 'toggle':
         switch (variantId) {
           case 'default':
@@ -233,11 +202,11 @@ const VariantPage = () => {
             return { 
               css: simpleModalCSS, 
               data: { 
-                isOpen: false, 
+                isOpen: isModalOpen, 
                 title: simpleModalData.title,
                 children: simpleModalData.children,
                 footer: simpleModalData.footer,
-                onClose: () => {},
+                onClose: () => setIsModalOpen(false),
                 showCloseButton: simpleModalData.showCloseButton
               } 
             };
@@ -245,11 +214,11 @@ const VariantPage = () => {
             return { 
               css: withFormModalCSS, 
               data: { 
-                isOpen: false,
+                isOpen: isModalOpen,
                 title: withFormModalData.title,
                 children: withFormModalData.children,
                 footer: withFormModalData.footer,
-                onClose: () => {},
+                onClose: () => setIsModalOpen(false),
                 showCloseButton: withFormModalData.showCloseButton
               } 
             };
@@ -404,31 +373,6 @@ const VariantPage = () => {
           { key: 'required', title: 'required', type: 'boolean | undefined', description: 'Marks select as required. Optional.', hasDetails: false },
           { key: 'onChange', title: 'onChange', type: '(value: string | string[]) => void | undefined', description: 'Change handler. Called with selected value(s). Optional.', hasDetails: false }
         ];
-      case 'checkbox':
-        return [
-          { key: 'label', title: 'label', type: 'string | undefined', description: 'Checkbox label text. Optional.', hasDetails: false },
-          { key: 'checked', title: 'checked', type: 'boolean | undefined', description: 'Checked state for single checkbox. Optional.', hasDetails: false },
-          { key: 'value', title: 'value', type: 'string | undefined', description: 'Checkbox value. Optional.', hasDetails: false },
-          { key: 'options', title: 'options', type: 'Array<{value: string, label: string, disabled?: boolean}> | undefined', description: 'Array of checkbox options for group. Each option has value, label, and optional disabled. Optional.', hasDetails: true },
-          { key: 'selectedValues', title: 'selectedValues', type: 'string[] | undefined', description: 'Array of selected values for checkbox group. Optional.', hasDetails: false },
-          { key: 'helperText', title: 'helperText', type: 'string | undefined', description: 'Helper text. Optional.', hasDetails: false },
-          { key: 'error', title: 'error', type: 'string | undefined', description: 'Error message. Optional.', hasDetails: false },
-          { key: 'disabled', title: 'disabled', type: 'boolean | undefined', description: 'Disables the checkbox(es). Optional.', hasDetails: false },
-          { key: 'onChange', title: 'onChange', type: '(checked: boolean, value?: string) => void | undefined', description: 'Change handler for single checkbox. Optional.', hasDetails: false },
-          { key: 'onMultiChange', title: 'onMultiChange', type: '(values: string[]) => void | undefined', description: 'Change handler for checkbox group. Called with array of selected values. Optional.', hasDetails: false }
-        ];
-      case 'radio':
-        return [
-          { key: 'name', title: 'name', type: 'string', description: 'Radio group name. Required for proper radio button grouping.', hasDetails: false },
-          { key: 'label', title: 'label', type: 'string | undefined', description: 'Radio label text. Optional.', hasDetails: false },
-          { key: 'value', title: 'value', type: 'string | undefined', description: 'Radio value. Optional.', hasDetails: false },
-          { key: 'options', title: 'options', type: 'Array<{value: string, label: string, disabled?: boolean}> | undefined', description: 'Array of radio options for group. Each option has value, label, and optional disabled. Optional.', hasDetails: true },
-          { key: 'selectedValue', title: 'selectedValue', type: 'string | undefined', description: 'Selected value for radio group. Optional.', hasDetails: false },
-          { key: 'helperText', title: 'helperText', type: 'string | undefined', description: 'Helper text. Optional.', hasDetails: false },
-          { key: 'error', title: 'error', type: 'string | undefined', description: 'Error message. Optional.', hasDetails: false },
-          { key: 'disabled', title: 'disabled', type: 'boolean | undefined', description: 'Disables the radio button(s). Optional.', hasDetails: false },
-          { key: 'onChange', title: 'onChange', type: '(value: string) => void | undefined', description: 'Change handler. Called with selected value. Optional.', hasDetails: false }
-        ];
       case 'toggle':
         return [
           { key: 'label', title: 'label', type: 'string | undefined', description: 'Toggle label text. Optional.', hasDetails: false },
@@ -532,12 +476,56 @@ const VariantPage = () => {
     );
   }
 
+  // Helper function to serialize React nodes for JSON
+  const serializeDataForJSON = (data: any): any => {
+    if (data === null || data === undefined) return data;
+    if (typeof data !== 'object') return data;
+    if (React.isValidElement(data)) return '<ReactNode />';
+    if (Array.isArray(data)) {
+      return data.map(item => serializeDataForJSON(item));
+    }
+    const serialized: any = {};
+    for (const key in data) {
+      if (React.isValidElement(data[key])) {
+        serialized[key] = '<ReactNode />';
+      } else if (typeof data[key] === 'object' && data[key] !== null) {
+        serialized[key] = serializeDataForJSON(data[key]);
+      } else {
+        serialized[key] = data[key];
+      }
+    }
+    return serialized;
+  };
+
+  // Helper function to restore React nodes from serialized data
+  const restoreReactNodes = (serializedData: any, originalData: any): any => {
+    if (serializedData === null || serializedData === undefined) return serializedData;
+    if (typeof serializedData !== 'object') return serializedData;
+    if (Array.isArray(serializedData)) {
+      return serializedData.map((item, index) => 
+        restoreReactNodes(item, Array.isArray(originalData) ? originalData[index] : undefined)
+      );
+    }
+    const restored: any = {};
+    for (const key in serializedData) {
+      if (serializedData[key] === '<ReactNode />' && originalData && React.isValidElement(originalData[key])) {
+        restored[key] = originalData[key];
+      } else if (typeof serializedData[key] === 'object' && serializedData[key] !== null) {
+        restored[key] = restoreReactNodes(serializedData[key], originalData?.[key]);
+      } else {
+        restored[key] = serializedData[key];
+      }
+    }
+    return restored;
+  };
+
   // Initialize editable values from variant config (only once when component/variant changes)
   const currentKey = `${componentId}-${variantId}`;
   useEffect(() => {
     if (variantConfig && initializedRef.current !== currentKey) {
       const cssString = JSON.stringify(variantConfig.css, null, 2);
-      const dataString = JSON.stringify(variantConfig.data, null, 2);
+      const serializedData = serializeDataForJSON(variantConfig.data);
+      const dataString = JSON.stringify(serializedData, null, 2);
       setEditableCSS(cssString);
       setEditableData(dataString);
       setExecutedCSS(null);
@@ -588,12 +576,27 @@ const VariantPage = () => {
   // Use executed values for preview, fallback to original config
   const previewConfig = useMemo(() => {
     const css = executedCSS !== null ? executedCSS : (variantConfig?.css || {});
-    const data = executedData !== null ? executedData : (variantConfig?.data || {});
+    let data = executedData !== null ? executedData : (variantConfig?.data || {});
+    
+    // Restore React nodes if we have executed data
+    if (executedData !== null && variantConfig?.data) {
+      data = restoreReactNodes(executedData, variantConfig.data);
+    }
+    
+    // For modals, ensure isOpen and onClose are properly set
+    if (componentId === 'modal') {
+      data = {
+        ...data,
+        isOpen: isModalOpen,
+        onClose: () => setIsModalOpen(false)
+      };
+    }
+    
     return {
       css,
       data
     };
-  }, [executedCSS, executedData, variantConfig]);
+  }, [executedCSS, executedData, variantConfig, componentId, isModalOpen]);
 
   // Dynamic base component code - loaded from developerComponent folder
   const getBaseComponentCode = () => {
@@ -606,7 +609,10 @@ const VariantPage = () => {
   const getUsageExample = () => {
     // Use executed values if available, otherwise use original config
     const displayCSS = executedCSS !== null ? executedCSS : (variantConfig?.css || {});
-    const displayData = executedData !== null ? executedData : (variantConfig?.data || {});
+    let displayData = executedData !== null ? executedData : (variantConfig?.data || {});
+    
+    // Serialize React nodes for example code display
+    displayData = serializeDataForJSON(displayData);
     
     return getExampleCode(componentId, variantId, displayCSS, displayData);
   };
@@ -660,7 +666,7 @@ const VariantPage = () => {
       <main className="lg:pl-64 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="mb-6">
           <Link 
-            href={`/component-library/${componentId}`} 
+            href={`/generic-components/${componentId}`} 
             className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group"
           >
             <svg className="h-4 w-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -700,12 +706,12 @@ const VariantPage = () => {
                 <span className="text-xs font-mono font-medium text-green-700 dark:text-green-400">Live</span>
               </div>
             </div>
-            <div className={`relative bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-800 shadow-lg overflow-hidden ${
+            <div className={`relative bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-800 shadow-lg font-sans ${
               componentId === 'modal'
-                ? 'p-6 min-h-[300px] flex justify-center items-center'
+                ? 'p-6 min-h-[400px] overflow-visible flex justify-center items-center'
                 : componentId === 'tabs'
-                ? 'p-6 min-h-[250px]'
-                : 'p-6 min-h-[200px] flex justify-center items-center'
+                ? 'p-6 min-h-[250px] overflow-hidden'
+                : 'p-6 min-h-[200px] flex justify-center items-center overflow-hidden'
             }`}>
               {componentId === 'button' ? (
                 <Button css={previewConfig.css as any} data={previewConfig.data as any} />
@@ -719,16 +725,20 @@ const VariantPage = () => {
                 <Input css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'select' ? (
                 <Select css={previewConfig.css as any} data={previewConfig.data as any} />
-              ) : componentId === 'checkbox' ? (
-                <Checkbox css={previewConfig.css as any} data={previewConfig.data as any} />
-              ) : componentId === 'radio' ? (
-                <Radio css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'toggle' ? (
                 <Toggle css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'dropdown' ? (
                 <Dropdown css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'modal' ? (
-                <Modal css={previewConfig.css as any} data={previewConfig.data as any} />
+                <>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-[#5f52ff] to-[#7c3aed] text-white rounded-lg hover:from-[#6d5fff] hover:to-[#8b4efd] transition-all font-medium shadow-lg shadow-[#5f52ff]/20 hover:shadow-[#5f52ff]/30"
+                  >
+                    Open Modal
+                  </button>
+                  <Modal css={previewConfig.css as any} data={previewConfig.data as any} />
+                </>
               ) : componentId === 'tabs' ? (
                 <Tabs css={previewConfig.css as any} data={previewConfig.data as any} />
               ) : componentId === 'breadcrumb' ? (

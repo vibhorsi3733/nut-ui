@@ -54,14 +54,25 @@ const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
         type="button"
         className={css.button}
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
       >
         {data.label}
-        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg 
+          className={`w-4 h-4 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       {isOpen && (
-        <div className={`${css.menu} ${data.placement === 'right' ? 'right-0' : 'left-0'}`}>
+        <div 
+          className={`${css.menu} ${data.placement === 'right' ? 'right-0' : 'left-0'} opacity-100 translate-y-0`}
+          role="menu"
+          aria-orientation="vertical"
+        >
           {data.items.map((item, index) => {
             if (item.divider) {
               return <div key={index} className="border-t border-gray-200 dark:border-gray-700 my-1" />;
@@ -70,12 +81,15 @@ const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
               <button
                 key={item.value}
                 type="button"
-                className={css.item}
+                className={`${css.item} ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => {
-                  if (item.onClick) item.onClick();
-                  setIsOpen(false);
+                  if (!item.disabled) {
+                    if (item.onClick) item.onClick();
+                    setIsOpen(false);
+                  }
                 }}
                 disabled={item.disabled}
+                role="menuitem"
               >
                 {item.icon && <span className={css.icon}>{item.icon}</span>}
                 {item.label}
