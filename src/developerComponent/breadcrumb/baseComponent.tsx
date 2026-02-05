@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface BreadcrumbCSS {
   container: string;
@@ -18,6 +19,7 @@ interface BreadcrumbItem {
 interface BreadcrumbData {
   items: BreadcrumbItem[];
   separator?: 'slash' | 'chevron' | 'dot';
+  disableLinks?: boolean; // Add option to disable links (useful when inside another Link)
 }
 
 interface BreadcrumbProps {
@@ -47,11 +49,11 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ css, data }) => {
         {data.items.map((item, index) => (
           <li key={index} className={css.item}>
             {index > 0 && getSeparator()}
-            {item.href ? (
-              <a href={item.href} className={css.link}>
+            {item.href && !data.disableLinks ? (
+              <Link href={item.href} className={css.link}>
                 {item.icon && <span className={css.icon}>{item.icon}</span>}
                 {item.label}
-              </a>
+              </Link>
             ) : (
               <span className={css.link}>
                 {item.icon && <span className={css.icon}>{item.icon}</span>}

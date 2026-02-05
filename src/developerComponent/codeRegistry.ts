@@ -1027,7 +1027,7 @@ const Dropdown: React.FC<DropdownProps> = ({ css, data }) => {
 export default Dropdown;`;
 
 // Modal Component Code
-export const modalBaseCode = `import React, { useEffect } from 'react';
+export const modalBaseCode = `import React, { useEffect, useRef } from 'react';
 
 interface ModalCSS {
   overlay: string;
@@ -1054,16 +1054,58 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ css, data }) => {
+  const bodyRef = useRef<HTMLBodyElement | null>(null);
+
   useEffect(() => {
-    if (data.isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    // Get body element reference using ref
+    bodyRef.current = document.body;
+
+    if (bodyRef.current) {
+      if (data.isOpen) {
+        bodyRef.current.style.overflow = 'hidden';
+      } else {
+        bodyRef.current.style.overflow = 'unset';
+      }
     }
+
     return () => {
-      document.body.style.overflow = 'unset';
+      // Cleanup: restore overflow when component unmounts or modal closes
+      if (bodyRef.current) {
+        bodyRef.current.style.overflow = 'unset';
+      }
     };
   }, [data.isOpen]);
+
+  // Helper function to add onClick handlers to footer buttons
+  const addCloseHandlersToFooter = (footer: React.ReactNode): React.ReactNode => {
+    if (!footer) return null;
+    
+    return React.Children.map(footer, (child) => {
+      if (React.isValidElement(child)) {
+        // Check if it's a button element
+        if (child.type === 'button') {
+          return React.cloneElement(child as React.ReactElement<any>, {
+            onClick: (e: React.MouseEvent) => {
+              // Call original onClick if it exists
+              if (child.props.onClick) {
+                child.props.onClick(e);
+              }
+              // Always close the modal
+              data.onClose();
+            },
+          });
+        }
+        
+        // If it's a fragment or has children, recurse
+        if (child.props && child.props.children) {
+          return React.cloneElement(child as React.ReactElement<any>, {
+            children: addCloseHandlersToFooter(child.props.children),
+          });
+        }
+      }
+      return child;
+    });
+  };
 
   if (!data.isOpen) return null;
 
@@ -1089,7 +1131,7 @@ const Modal: React.FC<ModalProps> = ({ css, data }) => {
         <div className={css.body}>
           {data.children}
         </div>
-        {data.footer && <div className={css.footer}>{data.footer}</div>}
+        {data.footer && <div className={css.footer}>{addCloseHandlersToFooter(data.footer)}</div>}
       </div>
     </div>
   );
@@ -1157,6 +1199,7 @@ export default Tabs;`;
 
 // Breadcrumb Component Code
 export const breadcrumbBaseCode = `import React from 'react';
+import Link from 'next/link';
 
 interface BreadcrumbCSS {
   container: string;
@@ -1176,6 +1219,7 @@ interface BreadcrumbItem {
 interface BreadcrumbData {
   items: BreadcrumbItem[];
   separator?: 'slash' | 'chevron' | 'dot';
+  disableLinks?: boolean; // Add option to disable links (useful when inside another Link)
 }
 
 interface BreadcrumbProps {
@@ -1205,11 +1249,11 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ css, data }) => {
         {data.items.map((item, index) => (
           <li key={index} className={css.item}>
             {index > 0 && getSeparator()}
-            {item.href ? (
-              <a href={item.href} className={css.link}>
+            {item.href && !data.disableLinks ? (
+              <Link href={item.href} className={css.link}>
                 {item.icon && <span className={css.icon}>{item.icon}</span>}
                 {item.label}
-              </a>
+              </Link>
             ) : (
               <span className={css.link}>
                 {item.icon && <span className={css.icon}>{item.icon}</span>}

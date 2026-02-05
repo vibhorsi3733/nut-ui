@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface ModalCSS {
   overlay: string;
@@ -25,14 +25,25 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ css, data }) => {
+  const bodyRef = useRef<HTMLBodyElement | null>(null);
+
   useEffect(() => {
-    if (data.isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    // Get body element reference using ref
+    bodyRef.current = document.body;
+
+    if (bodyRef.current) {
+      if (data.isOpen) {
+        bodyRef.current.style.overflow = 'hidden';
+      } else {
+        bodyRef.current.style.overflow = 'unset';
+      }
     }
+
     return () => {
-      document.body.style.overflow = 'unset';
+      // Cleanup: restore overflow when component unmounts or modal closes
+      if (bodyRef.current) {
+        bodyRef.current.style.overflow = 'unset';
+      }
     };
   }, [data.isOpen]);
 

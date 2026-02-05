@@ -79,7 +79,7 @@ const GenericComponentsPage = () => {
       case 'tabs':
         return <Tabs css={defaultTabsCSS} data={defaultTabsData} />;
       case 'breadcrumb':
-        return <Breadcrumb css={simpleBreadcrumbCSS} data={simpleBreadcrumbData} />;
+        return <Breadcrumb css={simpleBreadcrumbCSS} data={{ ...simpleBreadcrumbData, disableLinks: true }} />;
       default:
         return null;
     }
